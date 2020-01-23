@@ -11,8 +11,7 @@ flask-bcrypt = "*"
 flask-sqlalchemy = "*"
 flask-mail = "*"
 flask-testing = "*"
-flask-socketio = "*"
-marshmallow = "*"
+flask-migrate = "*"
 
 [requires]
 python_version = "3.8"
