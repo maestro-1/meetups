@@ -1,36 +1,48 @@
 <template>
   <v-card flat>
-    <v-container fluid>
-      <v-navigation-drawer v-model="state.sideNav"> </v-navigation-drawer>
+    <v-sheet class="overflow-hidden" style="position: relative;">
+      <v-navigation-drawer v-model="state.sideNav"
+      fixed
+      bottom
+      temporary
+      >
+        <v-list nav dense>
+          <v-list-item-group v-for="(menu, index) in state.menuItems" :key="index">
+            <div>
+              <p>
+                <v-icon left>{{ menu.icons }}</v-icon> {{ menu.name }}
+              </p>
+            </div>
+          </v-list-item-group>
+        </v-list>
+      </v-navigation-drawer>
 
-      <v-row class="child-flex">
-        <div>
-          <v-toolbar>
-            <v-toolbar-title>DevMeetups</v-toolbar-title>
-            <v-app-bar-nav-icon
-              @click="state.sideNav = !state.sideNav"
-            ></v-app-bar-nav-icon>
-            <v-spacer></v-spacer>
+      <v-container fluid>
+        <v-row class="child-flex">
+          <div>
+            <v-toolbar>
+              <v-app-bar-nav-icon
+                @click.stop="state.sideNav = !state.sideNav"
+              ></v-app-bar-nav-icon>
+              <v-toolbar-title>Events</v-toolbar-title>
 
-            <v-toolbar-items>
-              <v-btn depressed>
-                <v-icon left>mdi-magnify</v-icon>
-                View Meetups
-              </v-btn>
-            </v-toolbar-items>
+              <v-spacer></v-spacer>
 
-            <v-divider inset vertical></v-divider>
-
-            <v-toolbar-items>
-              <v-btn depressed>
-                <v-icon left>mdi-arrow-left</v-icon>
-                Another stuff
-              </v-btn>
-            </v-toolbar-items>
-          </v-toolbar>
-        </div>
-      </v-row>
-    </v-container>
+              <v-toolbar-items
+                v-for="(menu, index) in state.menuItems"
+                :key="index"
+              >
+                <v-btn depressed>
+                  <v-icon left>{{ menu.icons }}</v-icon>
+                  {{ menu.name }}
+                </v-btn>
+                <v-divider inset vertical></v-divider>
+              </v-toolbar-items>
+            </v-toolbar>
+          </div>
+        </v-row>
+      </v-container>
+    </v-sheet>
   </v-card>
 </template>
 
@@ -42,7 +54,29 @@ export default {
 
   setup() {
     const state = reactive({
-      sideNav: false
+      sideNav: false,
+      menuItems: [
+        {
+          name: "View Events",
+          icons: "calendar_today"
+        },
+        {
+          name: "Create Event",
+          icons: "mdi-arrow-left"
+        },
+        {
+          name: "Profile",
+          icons: "person"
+        },
+        {
+          name: "Login",
+          icons: "people_alt"
+        },
+        {
+          name: "Sign Up",
+          icons: "person_add"
+        }
+      ]
     });
     return { state };
   }

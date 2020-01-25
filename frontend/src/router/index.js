@@ -8,7 +8,6 @@ import Profile from "@/views/Users/Profile.vue";
 import Signin from "@/views/Users/Signin.vue";
 import Signup from "@/views/Users/Signup.vue";
 
-
 Vue.use(VueRouter);
 
 const routes = [
