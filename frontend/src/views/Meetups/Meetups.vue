@@ -1,6 +1,6 @@
 <template>
-  <div class="home">
-    <h2>Home Page</h2>
+  <div>
+    <h2>All Meetups page</h2>
   </div>
 </template>
 
@@ -11,3 +11,7 @@ export default {
 
 };
 </script>
+
+<style>
+
+</style>

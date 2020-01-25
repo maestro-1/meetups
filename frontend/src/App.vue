@@ -1,16 +1,17 @@
 <template>
   <v-app>
-    <home></home>
+    <Toolbar></Toolbar>
+    <router-view></router-view>
   </v-app>
 </template>
 
 <script>
-import Home from "@/views/Home.vue";
+import Toolbar from "@/components/Toolbar.vue";
 
 export default {
-  name: "App",
+  name: "home",
   components: {
-    Home
+    Toolbar
   }
 };
 </script>

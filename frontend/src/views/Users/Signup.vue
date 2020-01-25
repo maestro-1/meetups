@@ -1,13 +1,16 @@
 <template>
-  <div class="home">
-    <h2>Home Page</h2>
+   <div >
+    <h2>Sign up page</h2>
   </div>
 </template>
 
 <script>
 export default {
-  
 
 
-};
+}
 </script>
+
+<style>
+
+</style>
