@@ -12,6 +12,7 @@ flask-sqlalchemy = "*"
 flask-mail = "*"
 flask-testing = "*"
 flask-migrate = "*"
+flask-cors = "*"
 
 [requires]
 python_version = "3.8"
