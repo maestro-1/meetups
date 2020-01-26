@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <Toolbar></Toolbar>
+    <Toolbar />
     <router-view></router-view>
   </v-app>
 </template>

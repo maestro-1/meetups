@@ -1,16 +1,16 @@
 <template>
   <v-card flat>
     <v-sheet class="overflow-hidden" style="position: relative;">
-      <v-navigation-drawer v-model="state.sideNav"
-      fixed
-      bottom
-      temporary
-      >
+      <v-navigation-drawer v-model="state.sideNav" fixed bottom temporary>
         <v-list nav dense>
-          <v-list-item-group v-for="(menu, index) in state.menuItems" :key="index">
+          <v-list-item-group
+            v-for="(menu, index) in state.menuItems"
+            :key="index"
+          >
             <div>
               <p>
-                <v-icon left>{{ menu.icons }}</v-icon> {{ menu.name }}
+                <v-icon left>{{ menu.icons }}</v-icon>
+                {{ menu.name }}
               </p>
             </div>
           </v-list-item-group>
@@ -23,6 +23,7 @@
             <v-toolbar>
               <v-app-bar-nav-icon
                 @click.stop="state.sideNav = !state.sideNav"
+                class=".d-md-none .d-lg-flex"
               ></v-app-bar-nav-icon>
               <v-toolbar-title>Events</v-toolbar-title>
 
@@ -31,6 +32,7 @@
               <v-toolbar-items
                 v-for="(menu, index) in state.menuItems"
                 :key="index"
+                class=".d-sm-none .d-md-flex"
               >
                 <v-btn depressed>
                   <v-icon left>{{ menu.icons }}</v-icon>
@@ -62,7 +64,7 @@ export default {
         },
         {
           name: "Create Event",
-          icons: "mdi-arrow-left"
+          icons: "add_box"
         },
         {
           name: "Profile",
