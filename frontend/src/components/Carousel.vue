@@ -1,12 +1,16 @@
 <template>
-  <v-carousel hide-delimiters>
-    <v-carousel-item
-      v-for="(images, i) in state.images"
-      :key="i"
-      :src="images.src"
-    >
-    </v-carousel-item>
-  </v-carousel>
+  <v-card elevation="24" width="1000" class="mx-auto">
+    <v-carousel hide-delimiters width="400">
+      <v-row class="fill-height" align="center" justify="center">
+        <v-carousel-item
+          v-for="(images, i) in state.images"
+          :key="i"
+          :src="images.src"
+        >
+        </v-carousel-item>
+      </v-row>
+    </v-carousel>
+  </v-card>
 </template>
 
 <script>
@@ -19,7 +23,20 @@ export default {
     const state = reactive({
       images: [
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg"
+          src: "https://i.ytimg.com/vi/ROyHKuB8Cfk/maxresdefault.jpg"
+        },
+        {
+          src: "https://i.ytimg.com/vi/L7CB30eOahA/maxresdefault.jpg"
+        },
+        {
+          src: "https://i.ytimg.com/vi/dyBB_yJZ0k0/maxresdefault.jpg"
+        },
+        {
+          src:
+            "http://sotech-optima.co.uk/wp-content/uploads/2014/04/shutterstock_114912910.jpg"
+        },
+        {
+          src: "https://i.ytimg.com/vi/koibdzXOYvQ/maxresdefault.jpg"
         }
       ]
     });
