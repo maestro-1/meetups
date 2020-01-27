@@ -1,6 +1,6 @@
 <template>
   <v-card elevation="24" width="1000" class="mx-auto">
-    <v-carousel hide-delimiters width="400">
+    <v-carousel hide-delimiters width="400" cycle>
       <v-row class="fill-height" align="center" justify="center">
         <v-carousel-item
           v-for="(images, i) in state.images"
