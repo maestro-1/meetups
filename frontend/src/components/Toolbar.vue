@@ -1,7 +1,7 @@
 <template>
   <v-card flat>
     <v-sheet class="overflow-hidden" style="position: relative;">
-      <v-navigation-drawer v-model="state.sideNav" fixed bottom temporary>
+      <v-navigation-drawer v-model="state.sideNav" fixed temporary>
         <v-list nav dense>
           <v-list-item-group
             v-for="(menu, index) in state.menuItems"
@@ -23,7 +23,7 @@
             <v-toolbar>
               <v-app-bar-nav-icon
                 @click.stop="state.sideNav = !state.sideNav"
-                class=".d-md-none .d-lg-flex"
+                class="d-sm-none "
               ></v-app-bar-nav-icon>
               <v-toolbar-title>Events</v-toolbar-title>
 
@@ -32,7 +32,7 @@
               <v-toolbar-items
                 v-for="(menu, index) in state.menuItems"
                 :key="index"
-                class=".d-sm-none .d-md-flex"
+                class="d-none d-sm-flex"
               >
                 <v-btn depressed>
                   <v-icon left>{{ menu.icons }}</v-icon>
