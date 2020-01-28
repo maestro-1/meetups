@@ -21,8 +21,8 @@ Ensure you have the following installed on your local machine:
 - Clone or fork repo
 
   ```bash
-    - git clone https://github.com/maestro-1/velay
-    - cd velay
+    - git clone https://github.com/maestro-1/backend
+    - cd meetups
     - pipenv install
   ```
 
@@ -35,13 +35,12 @@ Ensure you have the following installed on your local machine:
 
 ### Testing
 
-Test specs are implemented using [_pytest_]().
+Test specs are implemented using [flask test]().
 
 - To test or consume the API locally, you can make use of [_Postman_](https://www.getpostman.com) to simulate a front-end client.
 
 > If you want to take the step below, first create a PostgreSQL database by running the command below in `psql`.
 
-- There is also a test script that you can fire up by running `pytest`. `pytest` performs a single full test suite run, including code coverage reporting.
 
 
 ## HTTP Requests
