@@ -24,4 +24,4 @@ class Events(db.Model):
     description = db.Column(db.String(20), nullable=False)
     location = db.Column(db.String(20), nullable=False)
     category = db.Column(db.String(20), nullable=False)
-    date = db.Column(db.String(20), nullable=False, default=datetime.utcnow)
+    date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
