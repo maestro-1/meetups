@@ -77,5 +77,5 @@ celerybeat-schedule
 # Environments
 .env
 .flaskenv
-.db
+meetups.db
 static/
