@@ -32,8 +32,7 @@ export default {
 </script>
 
 <style scoped>
-.beautify:hover{
- translate: 10,
+.beautify:hover {
+  translate: 10;
 }
-</style>>
-
+</style>
