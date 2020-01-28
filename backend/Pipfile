@@ -13,6 +13,7 @@ flask-mail = "*"
 flask-testing = "*"
 flask-migrate = "*"
 flask-cors = "*"
+flask-jwt-extended = "*"
 
 [requires]
 python_version = "3.8"

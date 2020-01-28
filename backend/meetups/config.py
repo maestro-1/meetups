@@ -6,7 +6,7 @@ Database_Uri = os.environ.get("SQLALCHEMY_DATABASE_URI")
 
 
 class BaseConfig:
-    SECRET_KEY = Secret_Key
+    JWT_SECRET_KEY = Secret_Key
     SQLALCHEMY_DATABASE_URI = Database_Uri
     # SQLALCHEMY_DATABASE_URI = "postgresql+psycopg2://postgres:admin@127.0.0.1:5432/fashionwares"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
