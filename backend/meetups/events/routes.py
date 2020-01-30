@@ -17,7 +17,7 @@ def all_events():
 
 @events.route("/meetup/<int:event_id>")
 def single_event(event_id):
-    events = Events.get_or_404(event_id)
+    events = Events.query.get_or_404(event_id)
     return jsonify(events)
 
 
