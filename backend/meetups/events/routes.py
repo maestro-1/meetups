@@ -1,7 +1,7 @@
 from flask import jsonify, request, Blueprint
-from . import db
-from .models import Events, Invites
-from .modelSchema import EventSchema
+from meetups import db
+from meetups.models import Events, Invites
+from meetups.modelSchema import EventSchema
 
 
 events = Blueprint("events", __name__)
@@ -20,7 +20,7 @@ def single_event(event_id):
     return jsonify(events)
 
 
-@events.route("/meetup/create", method=["POST"])
+@events.route("/meetup/create", methods=["POST"])
 def create_event():
     event_schema = EventSchema()
     event = event_schema.load(request.json)
