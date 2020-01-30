@@ -14,6 +14,8 @@ flask-testing = "*"
 flask-migrate = "*"
 flask-cors = "*"
 flask-jwt-extended = "*"
+marshmallow = "*"
+pillow = "*"
 
 [requires]
 python_version = "3.8"

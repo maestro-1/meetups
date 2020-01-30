@@ -1,5 +1,4 @@
 from . import db
-from datetime import datetime
 
 
 class Users(db.Model):
@@ -33,5 +32,5 @@ links = db.Table("links",
 
 class Invites(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
-    guest = db.Column(db.Integer, nullable=False, db.ForeignKey(users.id), uselist=False, unique=True)
-    event = db.Column(db.Integer, nullable=False, db.ForeignKey(events.id))
+    guest = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, uselist=False, unique=True)
+    event = db.Column(db.Integer, db.ForeignKey("events.id"), nullable=False)
