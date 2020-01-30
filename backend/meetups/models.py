@@ -8,7 +8,7 @@ class Users(db.Model):
     password = db.Column(db.String(15), nullable=False)
     contact = db.Column(db.Integer, unique=False)
     email = db.Column(db.String(50), nullable=False, unique=True)
-    imageUrl = db.Column(db.String(25), nullable=False, default="profile.jpg")
+    imageUrl = db.Column(db.String(25), default="profile.jpg")
     invitation = db.relationship("Invites", backref=db.backref("guest", uselist=False), lazy=True)
     meetups = db.relationship("Events", secondary="links", lazy="subquery",
                               backref=db.backref("meetups", lazy="dynamic"))
@@ -20,7 +20,7 @@ class Events(db.Model):
     description = db.Column(db.String(300), nullable=False)
     location = db.Column(db.String(100), nullable=False)
     date = db.Column(db.String, nullable=False)
-    imageUrl = db.Column(db.String(25), nullable=False, default="default.jpg")
+    imageUrl = db.Column(db.String(25), default="default.jpg")
     invites = db.relationship("Invites", backref="event", lazy=True)
 
 

@@ -3,22 +3,23 @@ import re
 import secrets
 from fnmatch import fnmatch
 from . import bcrypt, app
-from PIL import Image
 from marshmallow import (Schema, fields, post_load, pre_load,
                          validate, validates, ValidationError)
 
 
 def uploads(file, path):
-    if not fnmatch("*.jpeg") or fnmatch("*.png"):
-        return
+    if not (fnmatch(file.filename, "*.jpeg") or
+            fnmatch(file.filename, "*.png") or
+            fnmatch(file.filename, "*.jpg")):
+        return "Not an image"
 
     fname = secrets.token_hex(10)
-    _, fext = os.path.splitext(file)
+    _, fext = os.path.splitext(file.filename)
     final_name = fname + fext
     file_path = os.path.join(app.static_folder, path, final_name)
-    i = Image.open(file)
-    i.save(file_path)
-    return final_name
+    file.save(file_path, buffer_size=16384)
+    file.close()
+    return file_path
 
 
 class UserSchema(Schema):
@@ -27,12 +28,11 @@ class UserSchema(Schema):
     password = fields.Str(required=True, load_only=True)
     contact = fields.Integer(required=True)
     email = fields.Email(required=True, validate=validate.Email())
-    imageUrl = fields.Str()
+    imageUrl = fields.Str(dump_only=True)
 
     @post_load
     def adjust_data(self, data, **kwargs):
         data["password"] = bcrypt.generate_password_hash(data["password"].strip())
-        data["imageUrl"] = uploads(data["imageUrl"], "profile_image")
         return data
 
     @pre_load
@@ -45,7 +45,6 @@ class UserSchema(Schema):
 
     @validates("password")
     def strength(self, data):
-
         pattern = re.compile(r"(([\W+_])([A-Z]))")
         num = re.compile(r"\d+")
 
@@ -71,18 +70,12 @@ class EventSchema(Schema):
     description = fields.Str(required=True)
     location = fields.Str(required=True)
     date = fields.Str(required=True)
-    imageUrl = fields.Str(required=True)
+    imageUrl = fields.Str(dump_only=True)
 
     @pre_load
     def sanitize(self, data, **kwargs):
-        data["name"] = data["name"].strip()
+        data["title"] = data["title"].strip()
         data["description"] = data["description"].strip()
         data["location"] = data["location"].strip()
         data["date"] = data["date"].strip()
-        data["imageUrl"] = data["imageUrl"]
-        return data
-
-    @post_load
-    def file_lock(self, data, **kwargs):
-        data["imageUrl"] = uploads(data["imageUrl"], "event_image")
         return data
