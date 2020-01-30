@@ -25,7 +25,10 @@ def single_event(event_id):
 def create_event():
     event_schema = EventSchema()
     event = event_schema.load(request.json)
-    event = Events(event)
-    db.session.add(event)
+
+    new_event = Events(title=event["title"], description=event["description"],
+                       location=event["location"], date=event["date"],
+                       imageUrl=event["imageUrl"])
+    db.session.add(new_event)
     db.session.commit()
-    return
+    return jsonify(event)
