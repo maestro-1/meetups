@@ -5,23 +5,23 @@ class Users(db.Model):
     id = db.Column(db.Integer, nullable=False, primary_key=True)
     first_name = db.Column(db.String(20), nullable=False)
     last_name = db.Column(db.String(20), nullable=False)
+    password = db.Column(db.String(15), nullable=False)
     contact = db.Column(db.Integer, unique=False)
     email = db.Column(db.String(50), nullable=False, unique=True)
     imageUrl = db.Column(db.String(25), nullable=False, default="profile.jpg")
-    invitation = db.Relationship("Invites", backref="guest", lazy=True)
-    meetups = db.Relationship("Events", secondary="links", laszy="subquery",
+    invitation = db.relationship("Invites", backref=db.backref("guest", uselist=False), lazy=True)
+    meetups = db.relationship("Events", secondary="links", lazy="subquery",
                               backref=db.backref("meetups", lazy="dynamic"))
 
 
 class Events(db.Model):
-    id = db.Column(db.Integer, nullable=False, unique=False)
-    name = db.Column(db.String(20), nullable=False)
+    id = db.Column(db.Integer, nullable=False, primary_key=True)
+    title = db.Column(db.String(20), nullable=False)
     description = db.Column(db.String(300), nullable=False)
     location = db.Column(db.String(100), nullable=False)
-    category = db.Column(db.String(20), nullable=False)
-    date = db.Column(db.DateTime, nullable=False)
-    invites = db.Relationship("Invites", backref="event", lazy=True)
+    date = db.Column(db.String, nullable=False)
     imageUrl = db.Column(db.String(25), nullable=False, default="default.jpg")
+    invites = db.relationship("Invites", backref="event", lazy=True)
 
 
 links = db.Table("links",
@@ -32,5 +32,5 @@ links = db.Table("links",
 
 class Invites(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
-    guest = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, uselist=False, unique=True)
+    guest = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, unique=True)
     event = db.Column(db.Integer, db.ForeignKey("events.id"), nullable=False)
