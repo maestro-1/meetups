@@ -6,4 +6,4 @@ main = Blueprint("main", __name__)
 
 @main.route("/")
 def home():
-    return jsonify("Managing your events so you don't have to")
+    return jsonify("managing your events so you don't have to")
