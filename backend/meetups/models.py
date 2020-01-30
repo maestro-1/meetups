@@ -11,7 +11,7 @@ class Users(db.Model):
     imageUrl = db.Column(db.String(25), nullable=False, default="profile.jpg")
     invitation = db.Relationship("Invites", backref="guest", lazy=True)
     meetups = db.Relationship("Events", secondary="links", laszy="subquery",
-                            backref=db.backref("meetups", lazy="dynamic"))
+                              backref=db.backref("meetups", lazy="dynamic"))
 
 
 class Events(db.Model):
