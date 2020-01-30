@@ -32,5 +32,5 @@ links = db.Table("links",
 
 class Invites(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
-    guest_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, unique=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, unique=True)
     event_id = db.Column(db.Integer, db.ForeignKey("events.id"), nullable=False)
