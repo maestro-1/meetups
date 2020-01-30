@@ -21,7 +21,7 @@ def single_event(event_id):
     return jsonify(events)
 
 
-@events.route("/meetup/create", method=["POST"])
+@events.route("/meetup/create", methods=["POST"])
 def create_event():
     event_schema = EventSchema()
     event = event_schema.load(request.json)
