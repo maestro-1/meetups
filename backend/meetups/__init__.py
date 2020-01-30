@@ -19,4 +19,11 @@ bcrypt = Bcrypt(app)
 migrate = Migrate(app, db)
 jwt = JWTManager(app)
 
-from . import routes
+from .events.routes import events
+# from .users.routes import user
+from .main.routes import main
+
+
+app.register_blueprint(events)
+# app.register_blueprint(users)
+app.register_blueprint(main)
