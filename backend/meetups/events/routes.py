@@ -29,9 +29,9 @@ def single_event(event_id):
 def create_event():
     event_schema = EventSchema()
     event = event_schema.load(request.json)
-    if collect.recv() == "Not an image":
-        return jsonify("Not an Image")
     imageUrl = collect.recv()
+    if imageUrl == "Not an image":
+        return jsonify("Not an Image")
     new_event = Events(title=event["title"], description=event["description"],
                        location=event["location"], date=event["date"],
                        imageUrl=imageUrl)
