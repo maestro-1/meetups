@@ -78,5 +78,5 @@ celerybeat-schedule
 .env
 .flaskenv
 meetups.db
-static/event_image
-static/profile_image
+static/event_image/
+static/profile_image/
