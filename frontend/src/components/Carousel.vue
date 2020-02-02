@@ -1,16 +1,18 @@
 <template>
-  <v-card elevation="24" width="1000" class="mx-auto">
-    <v-carousel hide-delimiters width="400" cycle>
-      <v-row class="fill-height" align="center" justify="center">
-        <v-carousel-item
-          v-for="(images, i) in state.images"
-          :key="i"
-          :src="images.src"
-        >
-        </v-carousel-item>
-      </v-row>
-    </v-carousel>
-  </v-card>
+  <div class="shift">
+    <v-card elevation="24" width="1000" class="mx-auto">
+      <v-carousel hide-delimiters width="400" cycle>
+        <v-row class="fill-height" align="center" justify="center">
+          <v-carousel-item
+            v-for="(images, i) in state.images"
+            :key="i"
+            :src="images.src"
+          >
+          </v-carousel-item>
+        </v-row>
+      </v-carousel>
+    </v-card>
+  </div>
 </template>
 
 <script>
@@ -46,4 +48,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.shift {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+</style>

@@ -1,7 +1,20 @@
 <template>
   <div class="home">
-    <h2>{{ state.reply }}</h2>
-    <Carousel></Carousel>
+    <v-card class="mx-auto mt-8" max-width="1000" flat>
+      <Carousel></Carousel>
+      <v-card-actions>
+        <div class="my-2 mt-10 mb-6">
+          <v-btn color="info" to="/meetup/create" dark
+            >Register New Event</v-btn
+          >
+        </div>
+      </v-card-actions>
+      <h3>{{ state.reply }}</h3>
+      <!-- <v-expand-transition>
+        <div v-if="show">
+        </div>
+      </v-expand-transition> -->
+    </v-card>
   </div>
 </template>
 
