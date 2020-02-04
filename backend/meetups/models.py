@@ -3,8 +3,7 @@ from . import db
 
 class Users(db.Model):
     id = db.Column(db.Integer, nullable=False, primary_key=True)
-    first_name = db.Column(db.String(20), nullable=False)
-    last_name = db.Column(db.String(20), nullable=False)
+    full_name = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(15), nullable=False)
     contact = db.Column(db.Integer, unique=False)
     email = db.Column(db.String(50), nullable=False, unique=True)
@@ -19,7 +18,7 @@ class Events(db.Model):
     title = db.Column(db.String(20), nullable=False)
     description = db.Column(db.String(300), nullable=False)
     location = db.Column(db.String(100), nullable=False)
-    date = db.Column(db.String, nullable=False)
+    date = db.Column(db.DateTime, nullable=False)
     imageUrl = db.Column(db.String(25), default="default.jpg")
     invites = db.relationship("Invites", backref="event", lazy=True)
 
