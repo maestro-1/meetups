@@ -7,7 +7,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     events: [],
-    user: null
+    user: null,
+    errors: null
   },
   mutations: {
     getEvents(state, payload) {
@@ -27,9 +28,10 @@ export default new Vuex.Store({
           let meetups = [];
           for (let key in data) {
             meetups.push({
-              id: [key].id,
+              id: Number(key) + 1,
               title: data[key].title,
               description: data[key].description,
+              location: data[key].location,
               imageUrl: data[key].imageUrl,
               date: data[key].date
             });
