@@ -23,8 +23,7 @@ def uploads(file, path):
 
 
 class UserSchema(Schema):
-    first_name = fields.Str(required=True)
-    last_name = fields.Str(required=True)
+    full_name = fields.Str(required=True)
     password = fields.Str(required=True, load_only=True)
     contact = fields.Integer(required=True)
     email = fields.Email(required=True, validate=validate.Email())
@@ -37,9 +36,8 @@ class UserSchema(Schema):
 
     @pre_load
     def sanitize(self, data, **kwargs):
-        data["first_name"] = data["first_name"].strip()
-        data["last_name"] = data["last_name"].strip()
-        data["Address"] = data["Address"].strip()
+        data["full_name"] = data["full_name"].strip()
+        data["contact"] = data["contact"].strip()
         data["email"] = data["email"].strip()
         return data
 
@@ -69,7 +67,7 @@ class EventSchema(Schema):
     title = fields.Str(required=True)
     description = fields.Str(required=True)
     location = fields.Str(required=True)
-    date = fields.Str(required=True)
+    date = fields.DateTime(required=True)
     imageUrl = fields.Str(dump_only=True)
 
     @pre_load
