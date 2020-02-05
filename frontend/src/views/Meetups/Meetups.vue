@@ -10,7 +10,7 @@
               <v-card-subtitle v-text="item.description"></v-card-subtitle>
               <v-card-subtitle v-text="item.location"></v-card-subtitle>
             </div>
-            
+
             <v-avatar class="ma-3" size="180" tile width="180">
               <v-img :src="item.src"></v-img>
             </v-avatar>
@@ -53,7 +53,7 @@ export default {
     const upComingEvents = () => {
       let events = $store.getters.availableEvents;
       if (events.length == 0) {
-          setTimeout(upComingEvents, 1000);
+        setTimeout(upComingEvents, 1000);
       }
       return state.items.push(...events);
     };
