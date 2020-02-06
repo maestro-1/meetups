@@ -1,8 +1,8 @@
 <template>
   <v-container>
     <v-row dense class="justify-center">
-      <v-col v-for="(item, i) in state.items" :key="i" cols="10">
-        <v-card :color="item.color">
+      <v-col v-for="(item, i) in upComingEvents" :key="i" cols="10">
+        <v-card :color="item.color" :to="'/meetups/' + item.id">
           <div class="d-flex flex-no-wrap justify-space-between">
             <div>
               <v-card-title class="headline" v-text="item.title"></v-card-title>
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { reactive, onMounted } from "@vue/composition-api";
+import { reactive, onMounted, computed } from "@vue/composition-api";
 
 export default {
   setup(props, { root: { $store } }) {
@@ -50,19 +50,18 @@ export default {
       ]
     });
 
-    const upComingEvents = () => {
-      let events = $store.getters.availableEvents;
-      if (events.length == 0) {
-        setTimeout(upComingEvents, 1000);
-      }
-      return state.items.push(...events);
-    };
+    const upComingEvents = computed(() => {
+      return $store.getters.availableEvents;
+    });
 
     onMounted(() => {
+      if ($store.getters.availableEvents.length != 0) {
+        return;
+      }
+      console.log("hahaha");
       $store.dispatch("getEvents");
-      upComingEvents();
     });
-    return { state };
+    return { state, upComingEvents };
   }
 };
 </script>

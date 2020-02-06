@@ -8,52 +8,67 @@
               :src="state.card.img"
               gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
             >
-              <v-card-title>{{ state.card.title }}</v-card-title>
             </v-img>
           </v-card>
         </v-col>
       </v-row>
-      <div class="description">
-        <v-row dense class="justify-center">
-          <v-col :cols="state.card.flex">
-            <v-card>
-              <v-card-text class="text--primary">
-                <div>Hello There</div>
-
-                <div>How are you</div>
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
-      </div>
+      <v-row dense class="justify-center" style="cursor: pointer;">
+        <v-col :cols="state.card.flex">
+      <v-expand-transition>
+       <v-card @click="expand()">
+          <div v-if="state.show">
+           <v-card-title>{{ meetup.title }}</v-card-title>
+           <v-card-subtitle>{{ meetup.description }}</v-card-subtitle>
+           <v-card-subtitle>{{ meetup.location }}</v-card-subtitle>
+           <v-card-subtitle>{{ meetup.date }}</v-card-subtitle>
+         </div>
+         <div v-else>
+           <v-card-actions>
+             <v-card-title>{{ meetup.title }}</v-card-title>
+           </v-card-actions>
+         </div>
+       </v-card>
+      </v-expand-transition>
+        </v-col>
+      </v-row>
     </div>
   </v-container>
 </template>
 
 <script>
-import { reactive } from "@vue/composition-api";
+import { reactive, computed } from "@vue/composition-api";
 export default {
-  setup() {
+  props: ["id"],
+
+  setup(props, { root: { $store } }) {
     const state = reactive({
       card: {
         title: "foster",
         img: "https://cdn.vuetifyjs.com/images/cards/girl.jpg",
         flex: 8
-      }
+      },
+      show: false
+    });
+    const meetup = computed(() => {
+      console.log($store.state.events.length);
+      return $store.getters.singleEvents(Number(props.id));
     });
 
-    return { state };
+    const expand = () => {
+      state.show = !state.show;
+    };
+    return { state, meetup, expand };
   }
 };
 </script>
 
 <style lang="scss" scoped>
-#beautify:hover {
-  width: 85%;
-  transform: translate3d(-15%, 25%, 40px);
-  .description {
-    transform: translate3d(120%, -519%, 20px);
-    width: 65%;
-  }
-}
+// #beautify:hover {
+//   width: 85%;
+//   transform: translate3d(-15%, 25%, 40px);
+//   .description {
+//     transform: translate3d(120%, -519%, 20px);
+//     width: 65%;
+//   }
+// }
 </style>
