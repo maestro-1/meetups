@@ -44,6 +44,13 @@ export default new Vuex.Store({
   getters: {
     availableEvents(state) {
       return state.events;
+    },
+    singleEvents(state) {
+      return eventId => {
+        return state.events.find(event => {
+          return event.id == eventId;
+        });
+      };
     }
   }
 });

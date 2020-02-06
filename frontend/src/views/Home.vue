@@ -10,10 +10,6 @@
         </div>
       </v-card-actions>
       <h3>{{ state.reply }}</h3>
-      <!-- <v-expand-transition>
-        <div v-if="show">
-        </div>
-      </v-expand-transition> -->
     </v-card>
   </div>
 </template>

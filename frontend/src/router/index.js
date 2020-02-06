@@ -28,8 +28,9 @@ const routes = [
     component: Meetups
   },
   {
-    path: "/meetup",
+    path: "/meetups/:id",
     name: "meetup",
+    props: true,
     component: Meetup
   },
   {
