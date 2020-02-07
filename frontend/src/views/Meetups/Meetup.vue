@@ -14,21 +14,21 @@
       </v-row>
       <v-row dense class="justify-center" style="cursor: pointer;">
         <v-col :cols="state.card.flex">
-      <v-expand-transition>
-       <v-card @click="expand()">
-          <div v-if="state.show">
-           <v-card-title>{{ meetup.title }}</v-card-title>
-           <v-card-subtitle>{{ meetup.description }}</v-card-subtitle>
-           <v-card-subtitle>{{ meetup.location }}</v-card-subtitle>
-           <v-card-subtitle>{{ meetup.date }}</v-card-subtitle>
-         </div>
-         <div v-else>
-           <v-card-actions>
-             <v-card-title>{{ meetup.title }}</v-card-title>
-           </v-card-actions>
-         </div>
-       </v-card>
-      </v-expand-transition>
+          <v-expand-transition>
+            <v-card @click="expand()">
+              <div v-if="state.show">
+                <v-card-title>{{ meetup.title }}</v-card-title>
+                <v-card-subtitle>{{ meetup.description }}</v-card-subtitle>
+                <v-card-subtitle>{{ meetup.location }}</v-card-subtitle>
+                <v-card-subtitle>{{ meetup.date }}</v-card-subtitle>
+              </div>
+              <div v-else>
+                <v-card-actions>
+                  <v-card-title>{{ meetup.title }}</v-card-title>
+                </v-card-actions>
+              </div>
+            </v-card>
+          </v-expand-transition>
         </v-col>
       </v-row>
     </div>

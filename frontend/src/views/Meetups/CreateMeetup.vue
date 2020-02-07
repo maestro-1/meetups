@@ -34,13 +34,7 @@
 
           <v-layout row>
             <v-flex xs12 xs6 offset-xs3>
-              <v-text-field
-                name="imageUrl"
-                label="Image URL"
-                id="image-url"
-                v-model="state.event.imageUrl"
-                required
-              ></v-text-field>
+              <input type="file" id="files" ref="files" />
             </v-flex>
           </v-layout>
 
@@ -52,41 +46,76 @@
 
           <v-layout row>
             <v-flex xs12 xs6 offset-xs3>
-              <v-text-field
+              <v-textarea
                 name="description"
                 label="Description"
                 id="description"
-                multi-line
                 v-model="state.event.description"
                 required
-              ></v-text-field>
+              ></v-textarea>
             </v-flex>
           </v-layout>
 
           <v-layout row>
             <v-flex xs12 sm6 offset-xs3>
-              <v-col cols="12" lg="6">
-                <v-menu
-                  v-model="state.menu1"
-                  :close-on-content-click="false"
-                  max-width="290"
-                >
-                  <template v-slot:activator="{ on }">
-                    <v-text-field
-                      :value="datetime"
-                      clearable
-                      label="Event date"
-                      readonly
-                      v-on="on"
-                      @click:clear="state.event.date = null"
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker
-                    v-model="state.event.date"
-                    @change="state.menu1 = false"
-                  ></v-date-picker>
-                </v-menu>
-              </v-col>
+              <v-row>
+                <v-col cols="12" lg="6">
+                  <v-menu
+                    v-model="state.menu1"
+                    :close-on-content-click="false"
+                    max-width="290"
+                  >
+                    <template v-slot:activator="{ on }">
+                      <v-text-field
+                        :value="datetime"
+                        clearable
+                        label="Event date"
+                        readonly
+                        v-on="on"
+                        @click:clear="state.event.date = null"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
+                      v-model="state.event.date"
+                      @change="state.menu1 = false"
+                    ></v-date-picker>
+                  </v-menu>
+                </v-col>
+
+                <template>
+                  <v-row>
+                    <v-col cols="11" sm="5">
+                      <v-menu
+                        ref="menu"
+                        v-model="state.menu2"
+                        :close-on-content-click="false"
+                        :nudge-right="40"
+                        :return-value.sync="state.time"
+                        transition="scale-transition"
+                        offset-y
+                        max-width="290px"
+                        min-width="290px"
+                      >
+                        <template v-slot:activator="{ on }">
+                          <v-text-field
+                            v-model="state.time"
+                            label="Event time"
+                            prepend-icon="access_time"
+                            readonly
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-time-picker
+                          v-if="state.menu2"
+                          v-model="state.time"
+                          full-width
+                          @click:minute="$refs.menu.save(state.time)"
+                        ></v-time-picker>
+                      </v-menu>
+                    </v-col>
+                  </v-row>
+                </template>
+              </v-row>
             </v-flex>
           </v-layout>
 
@@ -107,7 +136,9 @@
 import moment from "moment";
 import { reactive, computed } from "@vue/composition-api";
 export default {
-  setup() {
+  props: [],
+
+  setup(props, { root: $store, $router }) {
     const state = reactive({
       event: {
         title: " ",
@@ -116,7 +147,9 @@ export default {
         description: " ",
         date: new Date().toISOString().substr(0, 10)
       },
-      menu1: false
+      menu1: false,
+      time: null,
+      menu2: false
     });
 
     const datetime = computed(() =>
@@ -129,13 +162,21 @@ export default {
       return (
         state.event.title !== " " &&
         state.event.location !== " " &&
-        state.event.imageUrl !== " " &&
+        // state.event.imageUrl !== " " &&
         state.event.description !== " "
       );
     });
 
     const createEvent = () => {
-      // const newEvent = state.event;
+      const newEvent = {
+        title: state.event.title,
+        location: state.event.location,
+        description: state.event.description,
+        imageUrl: state.event.imageUrl,
+        date: (() => state.event.date + "," + state.time)()
+      };
+      $store.dispatch("createEvents", newEvent);
+      $router.push({ name: "meetups" });
     };
 
     return { state, datetime, createEvent, validForm };
