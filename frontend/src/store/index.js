@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
+import { sendEventDetails, sendEventImage } from "../utils/requests.js";
 
 Vue.use(Vuex);
 
@@ -13,6 +14,9 @@ export default new Vuex.Store({
   mutations: {
     getEvents(state, payload) {
       state.events = payload;
+    },
+    createEvents(state, payload) {
+      state.events.push(payload);
     }
   },
   actions: {
@@ -39,6 +43,25 @@ export default new Vuex.Store({
           commit("getEvents", meetups);
         })
         .catch(err => err.message);
+    },
+
+    createEvents({ commit }, payload) {
+      const meetup = {
+        title: payload.title,
+        location: payload.location,
+        description: payload.description,
+        date: payload.date
+      };
+      const imageUrl = payload.imageUrl;
+      axios
+        .all([
+          sendEventImage("http://127.0.0.1:5000/meetup/create/file", imageUrl),
+          sendEventDetails("http://127.0.0.1:5000/meetup/create", meetup)
+        ])
+        .then(response => {
+          commit("createEvents", response.data);
+        })
+        .catch(err => err.data);
     }
   },
   getters: {
