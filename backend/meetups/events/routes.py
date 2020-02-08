@@ -1,10 +1,10 @@
-from meetups import db
+import asyncio
+from meetups.utils import uploads, datebase_entry
 from multiprocessing import Queue, Lock
 from meetups.models import Events, Invites
 from flask import jsonify, request, Blueprint
-from meetups.modelSchema import EventSchema, uploads
-from werkzeug.exceptions import BadRequestKeyError
-
+from meetups.modelSchema import EventSchema
+from werkzeug.exceptions import BadRequestKeyError, NotAcceptable
 
 events = Blueprint("events", __name__)
 queue = Queue()
@@ -33,20 +33,14 @@ def single_event(event_id):
 def create_event():
     event_schema = EventSchema()
     event = event_schema.load(request.json)
-
     lock.acquire()
     imageUrl = queue.get()
     lock.release()
 
     if imageUrl == "Not an image":
-        return jsonify("Not an Image")
-    new_event = Events(title=event["title"], description=event["description"],
-                       location=event["location"], date=event["date"],
-                       imageUrl=imageUrl)
-    db.session.add(new_event)
-    db.session.commit()
-    event["imageUrl"] = imageUrl
-    return jsonify(event), 201
+        raise NotAcceptable("Not an Image")
+    asyncio.run(datebase_entry(event, imageUrl))
+    return jsonify("created"), 201
 
 
 @events.route("/meetup/create/file", methods=["POST"])
@@ -55,7 +49,7 @@ def file_upload():
         if request.files is not None:
             file_name = uploads(request.files["imageUrl"], "event_image")
             queue.put(file_name)
-            return jsonify("Image received")
+            return jsonify("Done")
     except BadRequestKeyError:
         queue.put("default.jpg")
-        return jsonify("Image received")
+        return jsonify("Done")
