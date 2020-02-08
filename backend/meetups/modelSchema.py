@@ -1,25 +1,8 @@
-import os
 import re
-import secrets
-from fnmatch import fnmatch
-from . import bcrypt, app
+from . import bcrypt
+from .utils import date_store
 from marshmallow import (Schema, fields, post_load, pre_load,
                          validate, validates, ValidationError)
-
-
-def uploads(file, path):
-    if not (fnmatch(file.filename, "*.jpeg") or
-            fnmatch(file.filename, "*.png") or
-            fnmatch(file.filename, "*.jpg")):
-        return "Not an image"
-
-    fname = secrets.token_hex(10)
-    _, fext = os.path.splitext(file.filename)
-    final_name = fname + fext
-    file_path = os.path.join(app.static_folder, path, final_name)
-    file.save(file_path, buffer_size=16384)
-    file.close()
-    return file_path
 
 
 class UserSchema(Schema):
@@ -67,7 +50,7 @@ class EventSchema(Schema):
     title = fields.Str(required=True)
     description = fields.Str(required=True)
     location = fields.Str(required=True)
-    date = fields.DateTime(required=True)
+    date = fields.Str(required=True)
     imageUrl = fields.Str(dump_only=True)
 
     @pre_load
@@ -75,5 +58,9 @@ class EventSchema(Schema):
         data["title"] = data["title"].strip()
         data["description"] = data["description"].strip()
         data["location"] = data["location"].strip()
-        data["date"] = data["date"].strip()
+        return data
+
+    @post_load
+    def dateIssues(self, data, **kwargs):
+        data["date"] = date_store(data["date"])
         return data
