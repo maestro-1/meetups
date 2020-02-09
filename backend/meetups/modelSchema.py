@@ -1,5 +1,4 @@
 import re
-from . import bcrypt
 from .utils import date_store
 from marshmallow import (Schema, fields, post_load, pre_load,
                          validate, validates, ValidationError)
@@ -11,11 +10,6 @@ class UserSchema(Schema):
     contact = fields.Integer(required=True)
     email = fields.Email(required=True, validate=validate.Email())
     imageUrl = fields.Str(dump_only=True)
-
-    @post_load
-    def adjust_data(self, data, **kwargs):
-        data["password"] = bcrypt.generate_password_hash(data["password"].strip())
-        return data
 
     @pre_load
     def sanitize(self, data, **kwargs):

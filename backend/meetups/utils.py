@@ -1,9 +1,9 @@
 import os
 import secrets
-from . import app, db
+from . import app, db, bcrypt
 from fnmatch import fnmatch
 from datetime import datetime
-from meetups.models import Events
+from meetups.models import Events, Users
 
 
 def uploads(file, path):
@@ -31,9 +31,17 @@ def date_store(date):
     return date
 
 
-async def datebase_entry(event, imageUrl):
+async def event_entry(event, imageUrl):
     new_event = Events(title=event["title"], description=event["description"],
                        location=event["location"], date=event["date"],
                        imageUrl=imageUrl)
+    db.session.add(new_event)
+    db.session.commit()
+
+
+async def user_entry(user):
+    password = bcrypt.generate_password_hash(user["password"].strip().decode('utf-8'))
+    new_event = Users(fullname=user["fullname"], contact=user["contact"],
+                      email=user["emai"], password=password)
     db.session.add(new_event)
     db.session.commit()
