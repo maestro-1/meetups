@@ -2,6 +2,7 @@ import os
 import secrets
 from . import app, db, bcrypt
 from fnmatch import fnmatch
+from meetups.appy import celery
 from datetime import datetime
 from meetups.models import Events, Users
 
@@ -31,17 +32,19 @@ def date_store(date):
     return date
 
 
-async def event_entry(event, imageUrl):
+@celery.task()
+def event_entry(event, imageUrl):
     new_event = Events(title=event["title"], description=event["description"],
                        location=event["location"], date=event["date"],
                        imageUrl=imageUrl)
-    db.session.add(new_event)
-    db.session.commit()
+    # db.session.add(new_event)
+    # db.session.commit()
 
 
-async def user_entry(user):
-    password = bcrypt.generate_password_hash(user["password"].strip().decode('utf-8'))
-    new_event = Users(fullname=user["fullname"], contact=user["contact"],
-                      email=user["emai"], password=password)
-    db.session.add(new_event)
-    db.session.commit()
+@celery.task()
+def user_entry(user):
+    password = bcrypt.generate_password_hash(user["password"].strip()).decode('utf-8')
+    new_event = Users(full_name=user["full_name"], contact=user["contact"],
+                      email=user["email"], password=password)
+    # db.session.add(new_event)
+    # db.session.commit()
