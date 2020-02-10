@@ -16,6 +16,8 @@ flask-cors = "*"
 flask-jwt-extended = "*"
 marshmallow = "*"
 pillow = "*"
+celery = "*"
+redis = "*"
 
 [requires]
 python_version = "3.8"

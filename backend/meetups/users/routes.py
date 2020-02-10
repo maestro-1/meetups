@@ -1,4 +1,3 @@
-import asyncio
 from meetups import bcrypt
 from meetups.utils import user_entry
 from meetups.models import Users
@@ -16,8 +15,8 @@ def sign_up():
     email = Users.query.filter_by(email=user["email"]).first()
     if email:
         raise ValidationError("email address already taken, choose a different one")
-    asyncio.run(user_entry(user))
-    return jsonify("Welcome {}".format(user["fullname"]))
+    user_entry.delay(user)
+    return jsonify("Welcome {}".format(user["full_name"]))
 
 
 @users.route("/login", methods=["POST"])

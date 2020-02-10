@@ -1,4 +1,3 @@
-import asyncio
 from meetups.utils import uploads, event_entry
 from multiprocessing import Queue, Lock
 from meetups.models import Events, Invites
@@ -39,7 +38,7 @@ def create_event():
 
     if imageUrl == "Not an image":
         raise NotAcceptable("Not an Image")
-    asyncio.run(event_entry(event, imageUrl))
+    event_entry.delay(event, imageUrl)
     return jsonify("created"), 201
 
 
