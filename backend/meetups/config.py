@@ -10,6 +10,8 @@ class BaseConfig:
     SQLALCHEMY_DATABASE_URI = Database_Uri
     # SQLALCHEMY_DATABASE_URI = "postgresql+psycopg2://postgres:admin@127.0.0.1:5432/fashionwares"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    CELERY_BROKER_URL = 'redis://localhost:6379',
+    CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 
 
 class TestConfig(BaseConfig):
