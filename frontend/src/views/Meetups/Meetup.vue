@@ -1,11 +1,11 @@
 <template>
   <v-container fluid>
-    <div id="beautify">
-      <v-row dense class="justify-center" style="cursor: pointer;">
+    <div id="beautify" @click="expand()">
+      <v-row dense class="justify-center" style="cursor: pointer;" >
         <v-col :cols="state.card.flex">
           <v-card>
             <v-img
-              :src="state.card.img"
+              :src="'http://127.0.0.1:5000/static/event_image/' + meetup.imageUrl"
               gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
             >
             </v-img>
@@ -15,7 +15,7 @@
       <v-row dense class="justify-center" style="cursor: pointer;">
         <v-col :cols="state.card.flex">
           <v-expand-transition>
-            <v-card @click="expand()">
+            <v-card>
               <div v-if="state.show">
                 <v-card-title>{{ meetup.title }}</v-card-title>
                 <v-card-subtitle>{{ meetup.description }}</v-card-subtitle>
@@ -50,7 +50,6 @@ export default {
       show: false
     });
     const meetup = computed(() => {
-      console.log($store.state.events.length);
       return $store.getters.singleEvents(Number(props.id));
     });
 

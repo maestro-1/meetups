@@ -12,7 +12,11 @@
             </div>
 
             <v-avatar class="ma-3" size="180" tile width="180">
-              <v-img :src="item.src"></v-img>
+              <img
+                :src="
+                  'http://127.0.0.1:5000/static/event_image/' + item.imageUrl
+                "
+              />
             </v-avatar>
           </div>
         </v-card>
@@ -26,29 +30,7 @@ import { reactive, onMounted, computed } from "@vue/composition-api";
 
 export default {
   setup(props, { root: { $store } }) {
-    const state = reactive({
-      items: [
-        {
-          color: "#1F7087",
-          src: "https://cdn.vuetifyjs.com/images/cards/foster.jpg",
-          title: "Supermodel",
-          artist: "Foster the People"
-        },
-        {
-          color: "#952175",
-          src: "https://cdn.vuetifyjs.com/images/cards/halcyon.png",
-          title: "Halcyon Days",
-          artist: "Ellie Goulding"
-        },
-        {
-          color: "#953195",
-          src:
-            "https://tse1.mm.bing.net/th?id=OIP.OCUUMOVcgiJFen5ASCIpowHaFj&pid=Api&P=0&w=216&h=163",
-          title: "Memories",
-          artist: "Maroon 5"
-        }
-      ]
-    });
+    const state = reactive({});
 
     const upComingEvents = computed(() => {
       return $store.getters.availableEvents;
