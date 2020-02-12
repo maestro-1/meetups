@@ -33,14 +33,19 @@
           </v-layout>
 
           <v-layout row>
-            <v-flex xs12 xs6 offset-xs3>
-              <input type="file" id="files" ref="files" />
+            <v-flex xs12 sm6 offset-sm3>
+              <p>Select Image</p>
+              <input
+                type="file"
+                ref="image"
+                accept="image/*"
+                @change="onFilePicked"
+              />
             </v-flex>
           </v-layout>
-
           <v-layout row>
-            <v-flex xs12 xs6 offset-xs3>
-              <img :src="state.event.imageUrl" height="100" />
+            <v-flex xs12 sm6 offset-sm3>
+              <img :src="state.event.imageUrl" height="150" />
             </v-flex>
           </v-layout>
 
@@ -138,7 +143,7 @@ import { reactive, computed } from "@vue/composition-api";
 export default {
   props: [],
 
-  setup(props, { root: $store, $router }) {
+  setup(props, { root }) {
     const state = reactive({
       event: {
         title: " ",
@@ -147,6 +152,7 @@ export default {
         description: " ",
         date: new Date().toISOString().substr(0, 10)
       },
+      image: null,
       menu1: false,
       time: null,
       menu2: false
@@ -162,24 +168,46 @@ export default {
       return (
         state.event.title !== " " &&
         state.event.location !== " " &&
-        // state.event.imageUrl !== " " &&
+        state.event.imageUrl !== " " &&
+        state.time !== null &&
         state.event.description !== " "
       );
     });
+
+    //convert file from binary to string for display on page
+    const onFilePicked = event => {
+      const files = event.target.files;
+      let filename = files[0].name;
+      if (filename.lastIndexOf(".") <= 0) {
+        return alert("Please add a valid file!");
+      }
+      const fileReader = new FileReader();
+      fileReader.addEventListener("load", () => {
+        state.event.imageUrl = fileReader.result;
+      });
+      fileReader.readAsDataURL(files[0]);
+      state.image = files[0];
+    };
 
     const createEvent = () => {
       const newEvent = {
         title: state.event.title,
         location: state.event.location,
         description: state.event.description,
-        imageUrl: state.event.imageUrl,
+        image: state.image,
         date: (() => state.event.date + "," + state.time)()
       };
-      $store.dispatch("createEvents", newEvent);
-      $router.push({ name: "meetups" });
+      root.$store.dispatch("createEvents", newEvent);
+      root.$router.push({ name: "home" });
     };
 
-    return { state, datetime, createEvent, validForm };
+    return {
+      state,
+      datetime,
+      createEvent,
+      onFilePicked,
+      validForm
+    };
   }
 };
 </script>

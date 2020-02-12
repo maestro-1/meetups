@@ -1,6 +1,6 @@
 import re
 from .utils import date_store
-from marshmallow import (Schema, fields, post_load, pre_load,
+from marshmallow import (Schema, fields, post_load, pre_load, post_dump,
                          validate, validates, ValidationError)
 
 
@@ -57,4 +57,9 @@ class EventSchema(Schema):
     @post_load
     def dateIssues(self, data, **kwargs):
         data["date"] = date_store(data["date"])
+        return data
+
+    @post_dump
+    def imaging(self, data, **kwargs):
+        data["imageUrl"] = data["imageUrl"].split("/")[-1]
         return data

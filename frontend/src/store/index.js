@@ -9,7 +9,7 @@ export default new Vuex.Store({
   state: {
     events: [],
     user: null,
-    errors: null
+    alerts: null
   },
   mutations: {
     getEvents(state, payload) {
@@ -52,13 +52,14 @@ export default new Vuex.Store({
         description: payload.description,
         date: payload.date
       };
-      const imageUrl = payload.imageUrl;
+      const image = payload.image;
       axios
-        .all([
-          sendEventImage("http://127.0.0.1:5000/meetup/create/file", imageUrl),
-          sendEventDetails("http://127.0.0.1:5000/meetup/create", meetup)
-        ])
+        .all(
+          [sendEventImage("http://127.0.0.1:5000/meetup/create/file", image)],
+          [sendEventDetails("http://127.0.0.1:5000/meetup/create", meetup)]
+        )
         .then(response => {
+          console.log(response);
           commit("createEvents", response.data);
         })
         .catch(err => err.data);
@@ -66,6 +67,7 @@ export default new Vuex.Store({
   },
   getters: {
     availableEvents(state) {
+      console.log(state.events[1]);
       return state.events;
     },
     singleEvents(state) {

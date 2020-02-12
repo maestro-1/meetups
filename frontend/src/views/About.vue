@@ -1,31 +1,23 @@
 <template>
-  <div class="about">
-    <v-layout row>
-      <v-flex xs12 xs6 offset-xs5>
-        <h1>About Page</h1>
-      </v-flex>
-    </v-layout>
-    <v-layout row>
-      <v-flex xs12 xs6 offset-xs4>
-        <h3>Handling Your Events so You Don't have To</h3>
-      </v-flex>
-    </v-layout>
-    <v-layout row>
-      <v-flex xs12 xs6 offset-xs3>
-        <p>
-          We deal with event management, automating remainders for events,
-          sending out, requesting and receiving invitations. This is a clean way
-          to set up meetings, parties, weddings and other events without ever
-          having to worry about invitations getting lost in the mail.
-        </p>
-      </v-flex>
-    </v-layout>
-    <v-layout row>
-      <v-flex xs12 xs6 offset-xs5>
-        <v-btn depressed routter to="/">
-          home
-        </v-btn>
-      </v-flex>
-    </v-layout>
-  </div>
+  <v-container id="about" tag="section">
+    <base-subheading class="subheading">About Us</base-subheading>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut tortor
+      tellus. Donec maximus curs us pulvinar. Proin vehicula eros mauris, sit
+      amet rutrum libero vestibulum ac. Morbi ullamcorper eu lacus vulputate
+      consect. Etur vivamus sagittis accumsan quam eu malesuada. Proin et ante
+      vel libero ultrices cursus. Donec felis leo, cu rsus eget hendrerit at,
+      congue nec enim.
+    </p>
+  </v-container>
 </template>
+
+<style scoped>
+#about {
+  font-size: 20px;
+}
+.subheading {
+  font-weight: bold;
+  font-size: 25px;
+}
+</style>

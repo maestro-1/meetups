@@ -38,8 +38,8 @@ def create_event():
 
     if imageUrl == "Not an image":
         raise NotAcceptable("Not an Image")
-    event_entry.delay(event, imageUrl)
-    return jsonify("created"), 201
+    event_entry(event, imageUrl)
+    return jsonify(event), 201
 
 
 @events.route("/meetup/create/file", methods=["POST"])
@@ -48,7 +48,7 @@ def file_upload():
         if request.files is not None:
             file_name = uploads(request.files["imageUrl"], "event_image")
             queue.put(file_name)
-            return jsonify("Done")
+            return jsonify(file_name)
     except BadRequestKeyError:
         queue.put("default.jpg")
-        return jsonify("Done")
+        return jsonify("default.jpg")
