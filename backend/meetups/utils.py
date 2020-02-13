@@ -41,7 +41,7 @@ def event_entry(event, imageUrl):
     db.session.commit()
 
 
-@client.task
+# @client.task
 def user_entry(user):
     password = bcrypt.generate_password_hash(user["password"].strip()).decode('utf-8')
     new_event = Users(full_name=user["full_name"], contact=user["contact"],
