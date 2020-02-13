@@ -1,11 +1,13 @@
 <template>
   <v-container fluid>
     <div id="beautify" @click="expand()">
-      <v-row dense class="justify-center" style="cursor: pointer;" >
+      <v-row dense class="justify-center" style="cursor: pointer;">
         <v-col :cols="state.card.flex">
           <v-card>
             <v-img
-              :src="'http://127.0.0.1:5000/static/event_image/' + meetup.imageUrl"
+              :src="
+                'http://127.0.0.1:5000/static/event_image/' + meetup.imageUrl
+              "
               gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
             >
             </v-img>
@@ -43,8 +45,6 @@ export default {
   setup(props, { root: { $store } }) {
     const state = reactive({
       card: {
-        title: "foster",
-        img: "https://cdn.vuetifyjs.com/images/cards/girl.jpg",
         flex: 8
       },
       show: false

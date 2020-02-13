@@ -75,7 +75,7 @@
           </v-layout>
           <v-layout row>
             <v-flex xs12 xs6 offset-xs3>
-              <v-btn class="primary">Sign up</v-btn>
+              <v-btn class="primary" @click="SignUp()">Sign up</v-btn>
             </v-flex>
           </v-layout>
         </form>
@@ -88,7 +88,9 @@
 import { reactive, computed } from "@vue/composition-api";
 
 export default {
-  setup() {
+  props: [],
+
+  setup(props, { root: { $store, $router } }) {
     const state = reactive({
       user: {
         fullname: "",
@@ -113,7 +115,18 @@ export default {
       return "";
     });
 
-    return { state, compare, validForm };
+    const SignUp = () => {
+      const newUser = {
+        fullname: state.user.fullname,
+        contact: state.user.contact,
+        email: state.user.email,
+        password: state.user.password
+      };
+      $store.dispatch("SignUpUser", newUser);
+      $router.push({ name: "home" });
+    };
+
+    return { state, compare, validForm, SignUp };
   }
 };
 </script>

@@ -37,7 +37,7 @@
           </v-layout>
           <v-layout row>
             <v-flex xs12 xs6 offset-xs3>
-              <v-btn class="primary">Login</v-btn>
+              <v-btn class="primary" @click="login()">Login</v-btn>
             </v-flex>
           </v-layout>
         </form>
@@ -50,7 +50,9 @@
 import { reactive } from "@vue/composition-api";
 
 export default {
-  setup() {
+  props: [],
+
+  setup(props, { root: { $store } }) {
     const state = reactive({
       user: {
         emai: "",
@@ -61,7 +63,15 @@ export default {
         password: ""
       }
     });
-    return { state };
+
+    const login = () => {
+      const user = {
+        email: state.user.email,
+        password: state.user.password
+      };
+      $store.dispatch("LogUserIn", user);
+    };
+    return { state, login };
   }
 };
 </script>

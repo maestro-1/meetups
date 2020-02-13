@@ -40,6 +40,17 @@ class UserSchema(Schema):
                      """)
 
 
+class LoginSchema(Schema):
+    password = fields.Str(required=True, load_only=True)
+    email = fields.Email(required=True, validate=validate.Email())
+
+    @pre_load
+    def sanitize(self, data, **kwargs):
+        data["password"] = data["password"].strip()
+        data["email"] = data["email"].strip()
+        return data
+
+
 class EventSchema(Schema):
     title = fields.Str(required=True)
     description = fields.Str(required=True)
