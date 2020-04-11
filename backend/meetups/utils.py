@@ -1,5 +1,6 @@
 import os
 import secrets
+from PIL import Image
 from . import app, db, bcrypt
 from fnmatch import fnmatch
 from meetups.appy import client
@@ -19,6 +20,9 @@ def uploads(file, path):
     file_path = os.path.join(app.static_folder, path, final_name)
     file.save(file_path, buffer_size=16384)
     file.close()
+    i = Image.open(file_path)
+    i.thumbnail((1000, 562))
+    i.save(file_path)
     return file_path
 
 
