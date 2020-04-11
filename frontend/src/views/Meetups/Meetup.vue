@@ -5,9 +5,7 @@
         <v-col :cols="state.card.flex">
           <v-card>
             <v-img
-              :src="
-                'http://127.0.0.1:5000/static/event_image/' + meetup.imageUrl
-              "
+              :src="'http://127.0.0.1:5000' + meetup.imageUrl"
               gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
             >
             </v-img>

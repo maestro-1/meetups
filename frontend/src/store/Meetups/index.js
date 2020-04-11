@@ -60,7 +60,6 @@ export default {
   },
   getters: {
     availableEvents(state) {
-      console.log(state.events[1]);
       return state.events;
     },
     singleEvents(state) {

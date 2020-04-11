@@ -1,4 +1,5 @@
 import re
+from flask import url_for
 from .utils import date_store
 from marshmallow import (Schema, fields, post_load, pre_load, post_dump,
                          validate, validates, ValidationError)
@@ -28,11 +29,11 @@ class UserSchema(Schema):
                 raise ValidationError("""
                         Password must contain at least 8 characters, one numeric, one special and one Uppercase
                      """)
-            elif not num.findall(data):
+            if not num.findall(data):
                 raise ValidationError("""
                         Password must contain at least 8 characters, one numeric, one special and one Uppercase
                      """)
-            elif len(data) < 8 or len(data) > 15:
+            if len(data) < 8 or len(data) > 15:
                 raise ValidationError("Password cannot be less than 8 characters")
         except Exception:
             raise ValidationError("""
@@ -72,5 +73,6 @@ class EventSchema(Schema):
 
     @post_dump
     def imaging(self, data, **kwargs):
-        data["imageUrl"] = data["imageUrl"].split("/")[-1]
+        data["imageUrl"] = url_for('static', filename='event_image/' +
+                                   data["imageUrl"].split("/")[-1])
         return data
