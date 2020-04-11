@@ -8,10 +8,11 @@ Database_Uri = os.environ.get("SQLALCHEMY_DATABASE_URI")
 class BaseConfig:
     JWT_SECRET_KEY = Secret_Key
     SQLALCHEMY_DATABASE_URI = Database_Uri
-    # SQLALCHEMY_DATABASE_URI = "postgresql+psycopg2://postgres:admin@127.0.0.1:5432/fashionwares"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     CELERY_BROKER_URL = 'redis://localhost:6379',
     CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+    MAX_CONTENT_LENGTH = 16 * 1024 * 1024
+    JWT_TOKEN_LOCATION = ['headers']
 
 
 class TestConfig(BaseConfig):
@@ -24,5 +25,5 @@ class DevelopConfig(BaseConfig):
 
 
 class ProductionConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = "postgresql+psycopg2://postgres:admin@127.0.0.1:5432/fashionwares"
+    SQLALCHEMY_DATABASE_URI = "postgresql://postgres:admin@127.0.0.1:5432/fashionwares"
     DEBUG = False

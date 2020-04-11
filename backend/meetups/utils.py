@@ -1,5 +1,6 @@
 import os
 import secrets
+from PIL import Image
 from . import app, db, bcrypt
 from fnmatch import fnmatch
 from meetups.appy import client
@@ -19,6 +20,9 @@ def uploads(file, path):
     file_path = os.path.join(app.static_folder, path, final_name)
     file.save(file_path, buffer_size=16384)
     file.close()
+    i = Image.open(file_path)
+    i.thumbnail((1000, 562))
+    i.save(file_path)
     return file_path
 
 
@@ -41,7 +45,7 @@ def event_entry(event, imageUrl):
     db.session.commit()
 
 
-@client.task
+# @client.task
 def user_entry(user):
     password = bcrypt.generate_password_hash(user["password"].strip()).decode('utf-8')
     new_event = Users(full_name=user["full_name"], contact=user["contact"],

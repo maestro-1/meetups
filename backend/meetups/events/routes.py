@@ -3,6 +3,7 @@ from multiprocessing import Queue, Lock
 from meetups.models import Events, Invites
 from flask import jsonify, request, Blueprint
 from meetups.modelSchema import EventSchema
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from werkzeug.exceptions import BadRequestKeyError, NotAcceptable
 
 events = Blueprint("events", __name__)
@@ -14,9 +15,10 @@ lock = Lock()
 def all_events():
     event_schema = EventSchema(many=True)
     # page = request.args.get("page", 1, type=int)
-    # events = Events.query.get().paginate(page=page, per_page=5)
+    # events = Events.query.paginate(page=page, per_page=5)
     meetups = Events.query.all()
     meetups = event_schema.dump(meetups)
+
     return jsonify(meetups)
 
 
@@ -29,7 +31,9 @@ def single_event(event_id):
 
 
 @events.route("/meetup/create", methods=["POST"])
+@jwt_required
 def create_event():
+    current_user = get_jwt_identity()
     event_schema = EventSchema()
     event = event_schema.load(request.json)
     lock.acquire()
@@ -43,7 +47,9 @@ def create_event():
 
 
 @events.route("/meetup/create/file", methods=["POST"])
+@jwt_required
 def file_upload():
+    get_jwt_identity()
     try:
         if request.files is not None:
             file_name = uploads(request.files["imageUrl"], "event_image")

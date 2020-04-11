@@ -12,11 +12,7 @@
             </div>
 
             <v-avatar class="ma-3" size="180" tile width="180">
-              <img
-                :src="
-                  'http://127.0.0.1:5000/static/event_image/' + item.imageUrl
-                "
-              />
+              <img :src="'http://127.0.0.1:5000' + item.imageUrl" />
             </v-avatar>
           </div>
         </v-card>
@@ -38,6 +34,7 @@ export default {
 
     onMounted(() => {
       if ($store.getters.availableEvents.length != 0) {
+        console.log("got here");
         return;
       }
       console.log("hahaha");
