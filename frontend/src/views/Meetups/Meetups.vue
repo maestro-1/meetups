@@ -33,11 +33,6 @@ export default {
     });
 
     onMounted(() => {
-      if ($store.getters.availableEvents.length != 0) {
-        console.log("got here");
-        return;
-      }
-      console.log("hahaha");
       $store.dispatch("getEvents");
     });
     return { state, upComingEvents };
