@@ -2,18 +2,27 @@ import axios from "axios";
 
 export default {
   state: {
-    user: null
+    user: null,
+    loading: false,
+    error: null
   },
   mutations: {
     SignUpUser(state, payload) {
       state.alerts = payload;
     },
-    SignUpError(state, payload) {
-      state.error = payload;
+    Error(state, error) {
+      state.error = error;
     },
-    LogUserIn(state, payload) {
-      state.user = payload;
-      console.log(state.user);
+    LogUserIn(state, userData) {
+      state.user = userData;
+      localStorage.setItem("user", JSON.stringify(userData));
+      axios.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${userData.token}`;
+    },
+    logUserOut() {
+      localStorage.removeItem("user");
+      location.reload();
     }
   },
   actions: {
@@ -27,10 +36,10 @@ export default {
       axios
         .post("http://127.0.0.1:5000/signup", user)
         .then(response => {
-          commit("SignUpUser", response);
+          commit("SignUpUser", response.data);
         })
         .catch(err => {
-          console.log(err);
+          commit("Error", err);
         });
     },
     LogUserIn({ commit }, payload) {
@@ -43,7 +52,9 @@ export default {
         .then(response => {
           commit("LogUserIn", response.data);
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+          commit("Error", err);
+        });
     }
   },
   getters: {}
