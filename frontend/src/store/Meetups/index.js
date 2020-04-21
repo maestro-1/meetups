@@ -10,7 +10,7 @@ export default {
       state.events = payload;
     },
     createEvents(state, payload) {
-      state.events.push(payload);
+      state.events.push({...payload});
     }
   },
   actions: {
@@ -19,6 +19,7 @@ export default {
         .get("http://127.0.0.1:5000/meetups")
         .then(response => {
           let events = response.data;
+          console.log(events)
           return events;
           // return events.sort((eventA, eventB) => eventA.date - eventB.date);
         })
