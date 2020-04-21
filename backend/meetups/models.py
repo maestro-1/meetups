@@ -8,9 +8,6 @@ class Users(db.Model):
     contact = db.Column(db.Integer, unique=False)
     email = db.Column(db.String(50), nullable=False, unique=True)
     imageUrl = db.Column(db.String(25), default="profile.jpg")
-    invitation = db.relationship("Invites", backref=db.backref("guest", uselist=False), lazy=True)
-    meetups = db.relationship("Events", secondary="links", lazy="subquery",
-                              backref=db.backref("meetups", lazy="dynamic"))
 
 
 class Events(db.Model):
@@ -20,16 +17,26 @@ class Events(db.Model):
     location = db.Column(db.String(100), nullable=False)
     date = db.Column(db.DateTime, nullable=False)
     imageUrl = db.Column(db.String(25), default="default.jpg")
-    invites = db.relationship("Invites", backref="event", lazy=True)
+    hosting = db.relationship("Users", secondary="hosts", lazy="subquery",
+                              backref=db.backref("event", lazy="dynamic"))
 
 
-links = db.Table("links",
-                 db.Column("user_id", db.Integer, db.ForeignKey("users.id"), primary_key=True),
-                 db.Column("events_id", db.Integer, db.ForeignKey("events.id"), primary_key=True)
+hosts = db.Table("hosts",
+                 db.Column("user_id", db.Integer, db.ForeignKey("users.id")),
+                 db.Column("events_id", db.Integer, db.ForeignKey("events.id"))
                  )
 
 
-class Invites(db.Model):
+class Guests(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, unique=True)
-    event_id = db.Column(db.Integer, db.ForeignKey("events.id"), nullable=False)
+    full_name = db.Column(db.String(50), nullable=False)
+    contact = db.Column(db.Integer, unique=False)
+    email = db.Column(db.String(50), nullable=False, unique=True)
+    invitation = db.relationship("Events", secondary="guest", lazy="subquery",
+                                 backref=db.backref("guest", lazy="dynamic"))
+
+
+guest = db.Table("guest",
+                 db.Column("guests_id", db.Integer, db.ForeignKey("guests.id")),
+                 db.Column("events_id", db.Integer, db.ForeignKey("events.id"))
+                 )

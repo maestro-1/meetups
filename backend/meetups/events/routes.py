@@ -1,6 +1,6 @@
 from meetups.utils import uploads, event_entry
 from multiprocessing import Queue, Lock
-from meetups.models import Events, Invites
+from meetups.models import Events, Guests
 from flask import jsonify, request, Blueprint, g, make_response
 from meetups.modelSchema import EventSchema
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -55,13 +55,14 @@ def create_event():
     current_user = get_jwt_identity()
     event_schema = EventSchema()
     event = event_schema.load(request.json)
+
     lock.acquire()
     imageUrl = queue.get()
     lock.release()
 
     if imageUrl == "Not an image":
         raise NotAcceptable("Not an Image")
-    event_entry(event, imageUrl)
+    # event_entry(event, imageUrl)
     return jsonify(event), 201
 
 
