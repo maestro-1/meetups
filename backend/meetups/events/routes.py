@@ -74,7 +74,7 @@ def file_upload():
         if request.files is not None:
             file_name = uploads(request.files["imageUrl"], "event_image")
             queue.put(file_name)
-            return
+            return 'done'
     except BadRequestKeyError:
         queue.put("default.jpg")
-        return jsonify("default.jpg")
+        return "default.jpg"

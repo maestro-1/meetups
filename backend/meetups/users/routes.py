@@ -1,5 +1,5 @@
-from flask import after_this_request, g, make_response
-from meetups import bcrypt
+from flask import g, make_response
+from meetups import bcrypt, app
 from meetups.utils import user_entry
 from meetups.models import Users
 from flask import jsonify, request, Blueprint
@@ -31,14 +31,20 @@ def after_request(response):
 
 
 @users.route("/signup", methods=["POST"])
-def sign_up():
+@users.errorhandler(ValidationError)
+def sign_up(error=None):
     user_schema = UserSchema()
-    user = user_schema.load(request.json)
-    email = Users.query.filter_by(email=user["email"]).first()
-    if email:
-        raise ValidationError("email address already taken, choose a different one")
-    user_entry(user)
-    return jsonify("Welcome {}".format(user["full_name"])), 201
+
+    try:
+        user = user_schema.load(request.json)
+        email = Users.query.filter_by(email=user["email"]).first()
+        if email:
+            raise ValidationError("email address already taken, choose a different one")
+
+        # user_entry(user)
+        return jsonify("Welcome {}".format(user["password"])), 201
+    except ValidationError as error:
+        return jsonify({'msg': error.messages})
 
 
 @users.route("/login", methods=["POST"])
