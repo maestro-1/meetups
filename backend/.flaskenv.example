@@ -1,0 +1,2 @@
+#entry into application
+FLASK_APP=app.py
