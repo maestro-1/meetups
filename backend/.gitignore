@@ -79,3 +79,5 @@ celerybeat-schedule
 .flaskenv
 meetups.db
 static/
+Nuxtjs-Cheat-Sheet.pdf
+test.jpg
