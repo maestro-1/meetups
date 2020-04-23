@@ -1,6 +1,7 @@
 import json
 import unittest
 from base import BaseTestCase
+from meetups.models import Users
 
 
 class Login(BaseTestCase):
@@ -53,44 +54,64 @@ class SignUp(BaseTestCase):
                                  'password': '#Jane3', 'full_name': 'Sixtus Ruona',
                                  'contact': '0901234445'})
             )
-            # self.assertRaises()
+            self.assert400(response)
+            self.assertIn(b'Password must contain at least 8 characters, one numeric, one special and one Uppercase',
+                          response.data)
 
-    # def test_password_not_strong(self):
-    #     with self.client:
-    #         response = self.client.post(
-    #             '/signup',
-    #             content_type='application/json',
-    #             data=json.dumps({'email': 'ruon32@gmail.com',
-    #                              'password': '#Jane3', 'full_name': 'Sixtus Ruona',
-    #                              'contact': '0901234445'})
-    #         )
-    #         print(response)
-            # self.assertRaises()
+    def test_password_not_strong(self):
+        with self.client:
+            response = self.client.post(
+                '/signup',
+                content_type='application/json',
+                data=json.dumps({'email': 'ruon32@gmail.com',
+                                 'password': 'Jennifer391', 'full_name': 'Sixtus Ruona',
+                                 'contact': '0901234445'})
+            )
+            self.assert400(response)
+            self.assertIn(b'Password must contain at least 8 characters, one numeric, one special and one Uppercase',
+                          response.data)
 
     def test_if_password_is_hashed(self):
+        with self.client:
+            self.client.post(
+                '/signup',
+                content_type='application/json',
+                data=json.dumps({'email': 'marioLuwigi@gmail.com',
+                                 'password': '#Jimmy32', 'full_name': 'Mario mario',
+                                 'contact': '0901234445'})
+            )
+            user = Users.query.filter_by(email='marioLuwigi@gmail.com').first()
+            self.assertNotEqual(user.password, '#Jimmy32')
+
+    def test_email_already_used(self):
+        with self.client:
+            response = self.client.post(
+                '/signup',
+                content_type='application/json',
+                data=json.dumps({'email': 'anino@gmail.com',
+                                 'password': '#Jane_erry32', 'full_name': 'Sixtus Ruona',
+                                 'contact': '0901234445'})
+            )
+            error = json.loads(response.data.decode('utf-8'))
+            self.assert400(response)
+            self.assertIn('email address already taken, choose a different one',
+                          error['msg'])
+
+    def test_Invalid_email(self):
+        with self.client:
+            response = self.client.post(
+                '/signup',
+                content_type='application/json',
+                data=json.dumps({'email': 'ruon32@gmail',
+                                 'password': '#Janeeer32', 'full_name': 'Sixtus Ruona',
+                                 'contact': '0901234445'})
+            )
+            error = json.loads(response.data.decode('utf-8'))
+            self.assertEqual('Not a valid email address.', error['msg']['email'][0])
+            self.assert400(response)
+
+    def test_password_reset(self):
         pass
-
-    # def test_email_already_used(self):
-    #     with self.client:
-    #         response = self.client.post(
-    #             '/signup',
-    #             content_type='application/json',
-    #             data=json.dumps({'email': 'ruon32@gmail.com',
-    #                              'password': '#Jane3', 'full_name': 'Sixtus Ruona',
-    #                              'contact': '0901234445'})
-    #         )
-        # self.assertRaises()
-
-    # def test_Invalid_email(self):
-    #     with self.client:
-    #         response = self.client.post(
-    #             '/signup',
-    #             content_type='application/json',
-    #             data=json.dumps({'email': 'ruon32@gmail.com',
-    #                              'password': '#Jane3', 'full_name': 'Sixtus Ruona',
-    #                              'contact': '0901234445'})
-    #         )
-        # self.assertRaises()
 
 
 if __name__ == '__main__':
