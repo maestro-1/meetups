@@ -84,6 +84,7 @@ class EventTestSucces(BaseTestCase):
             self.assertEqual('Heaven Come',
                              json.loads(created_response.data.decode('utf-8'))['title'])
 
+
     def test_event_update(self):
         with self.client:
             response = self.client.post(
@@ -102,7 +103,9 @@ class EventTestSucces(BaseTestCase):
                 data=json.dumps({'title': 'Heart Enlargemen', 'description': 'The gospel enlarging your heart',
                                  'location': 'Ibadan, Nigeria', 'date': '2020-10-12, 12:00'})
             )
-            self.assert403(update_event_response)
+            self.assert200(update_event_response)
+=======
+
 
     def test_event_delete(self):
         with self.client:

@@ -83,6 +83,7 @@ class SignUp(BaseTestCase):
             user = Users.query.filter_by(email='marioLuwigi@gmail.com').first()
             self.assertNotEqual(user.password, '#Jimmy32')
 
+
     def test_email_already_used(self):
         with self.client:
             response = self.client.post(

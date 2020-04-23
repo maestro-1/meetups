@@ -104,3 +104,4 @@ def password_reset():
 @jwt_required
 def logout():
     pass
+
