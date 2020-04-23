@@ -6,6 +6,7 @@ from marshmallow import (Schema, fields, post_load, pre_load, post_dump,
 
 
 class UserSchema(Schema):
+    id = fields.Integer(dump_only=True)
     full_name = fields.Str(required=True)
     password = fields.Str(required=True, load_only=True)
     contact = fields.Integer(required=True)
@@ -21,11 +22,11 @@ class UserSchema(Schema):
 
     @validates("password")
     def strength(self, data):
-        pattern = re.compile(r"(([\W+_])([A-Z]))")
+        pattern = re.compile(r"[\W+]")
         num = re.compile(r"\d+")
 
-        # if (not pattern.search(data).group(2) and pattern.search(data).group(3) or
-        if (not num.findall(data) or
+        if (not pattern.search(data) or
+                not num.findall(data) or
                 len(data) < 8 or len(data) > 15):
             raise ValidationError('Password must contain at least 8 characters, one numeric, one special and one Uppercase')
 
@@ -42,6 +43,7 @@ class LoginSchema(Schema):
 
 
 class EventSchema(Schema):
+    id = fields.Integer(dump_only=True)
     title = fields.Str(required=True)
     description = fields.Str(required=True)
     location = fields.Str(required=True)
@@ -65,3 +67,10 @@ class EventSchema(Schema):
         data["imageUrl"] = url_for('static', filename='event_image/' +
                                    data["imageUrl"].split("/")[-1])
         return data
+
+
+class UpdateUserSchema(Schema):
+    id = fields.Integer(dump_only=True)
+    full_name = fields.Str()
+    contact = fields.Integer()
+    email = fields.Email(validate=validate.Email())
