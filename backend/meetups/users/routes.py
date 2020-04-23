@@ -96,5 +96,12 @@ def profile(user_id):
 
 
 @users.route('/password_reset', methods=['POST'])
-def password_reset(self):
+def password_reset():
     pass
+
+
+@users.route('/password_reset', methods=['POST'])
+@jwt_required
+def logout():
+    pass
+

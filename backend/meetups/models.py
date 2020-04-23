@@ -17,7 +17,7 @@ class Events(db.Model):
     location = db.Column(db.String(100), nullable=False)
     date = db.Column(db.DateTime, nullable=False)
     imageUrl = db.Column(db.String(25), default="default.jpg")
-    hosting = db.relationship("Users", secondary="hosts", lazy="subquery",
+    hosting = db.relationship("Users", secondary="hosts", cascade="all", lazy="subquery",
                               backref=db.backref("event", lazy="dynamic"))
 
 
@@ -32,7 +32,7 @@ class Guests(db.Model):
     full_name = db.Column(db.String(50), nullable=False)
     contact = db.Column(db.Integer, unique=False)
     email = db.Column(db.String(50), nullable=False, unique=True)
-    invitation = db.relationship("Events", secondary="guest", lazy="subquery",
+    invitation = db.relationship("Events", secondary="guest", cascade="all", lazy="subquery",
                                  backref=db.backref("guest", lazy="dynamic"))
 
 

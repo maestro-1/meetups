@@ -25,5 +25,5 @@ class DevelopConfig(BaseConfig):
 
 
 class ProductionConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = "postgresql://postgres:admin@127.0.0.1:5432/fashionwares"
+    SQLALCHEMY_DATABASE_URI = ""
     DEBUG = False

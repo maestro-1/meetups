@@ -70,14 +70,17 @@ class EventTestFail(BaseTestCase):
             headers = {}
             headers['Authorization'] = 'Bearer {}'.format(token)
 
-            delete_event_response = self.client.put(
+
+            update_event_response = self.client.put(
+
                 '/meetup/2/edit',
                 headers=headers,
                 content_type='application/json',
                 data=json.dumps({'title': 'Heart Enlargemen', 'description': 'The gospel enlarging your heart',
                                  'location': 'Ibadan, Nigeria', 'date': '2020-10-12, 12:00'})
             )
-            self.assert403(delete_event_response)
+
+            self.assert403(update_event_response)
 
     def test_403_error_in_event_delete(self):
         with self.client:
