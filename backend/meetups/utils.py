@@ -37,11 +37,12 @@ def date_store(date):
 
 
 # @client.task
-def event_entry(event, imageUrl):
+def event_entry(event, host, imageUrl):
     new_event = Events(title=event["title"], description=event["description"],
                        location=event["location"], date=event["date"],
                        imageUrl=imageUrl)
     db.session.add(new_event)
+    host.event.append(new_event)
     db.session.commit()
 
 
