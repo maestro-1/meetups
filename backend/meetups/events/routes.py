@@ -51,7 +51,6 @@ def single_event(event_id):
     return jsonify(event)
 
 
-
 @events.route('/meetup/<int:event_id>/edit', methods=['PUT', 'DELETE'])
 @jwt_required
 def edit_event(event_id):
@@ -62,9 +61,8 @@ def edit_event(event_id):
     for host in hosts:
         if identity == host.email:
 
-
             if request.method == 'PUT' or request.method == 'POST':
-      
+
                 update = update_schema.load(request.json)
 
                 events.title = update['title']
@@ -84,7 +82,6 @@ def edit_event(event_id):
                     return jsonify({'msg': 'Internal Serve Error'}), 500
     else:
         abort(403)
-   
 
 
 @events.route("/meetup/create", methods=["POST"])
