@@ -5,7 +5,7 @@ from . import app, db, bcrypt
 from fnmatch import fnmatch
 from meetups.appy import client
 from datetime import datetime
-from meetups.models import Events, Users
+from meetups.models import Events, Users, Guests
 
 
 def uploads(file, path):
@@ -49,7 +49,17 @@ def event_entry(event, host, imageUrl):
 # @client.task
 def user_entry(user):
     password = bcrypt.generate_password_hash(user["password"].strip()).decode('utf-8')
-    new_event = Users(full_name=user["full_name"], contact=user["contact"],
-                      email=user["email"], password=password)
-    db.session.add(new_event)
+    new_user = Users(full_name=user["full_name"], contact=user["contact"],
+                     email=user["email"], password=password)
+    db.session.add(new_user)
+    db.session.commit()
+
+
+# @client.task
+def guest_entry(user, event):
+    new_guest = Guests(full_name=user["full_name"], contact=user["contact"],
+                       email=user["email"])
+    db.session.add(new_guest)
+    db.session.commit()
+    event.guest.append(new_guest)
     db.session.commit()

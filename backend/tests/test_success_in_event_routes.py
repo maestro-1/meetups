@@ -14,7 +14,7 @@ class EventTestSucces(BaseTestCase):
         response = self.client.get('/meetup/1')
         self.assert200(response)
         self.assertEqual('Delta, Nigeria',
-                         json.loads(response.data.decode('utf-8'))['location'])
+                         json.loads(response.data.decode('utf-8'))['event']['location'])
 
     def test_successfully_create_event_with_image(self):
         with self.client:

@@ -42,6 +42,13 @@ class LoginSchema(Schema):
         return data
 
 
+class UpdateUserSchema(Schema):
+    id = fields.Integer(dump_only=True)
+    full_name = fields.Str()
+    contact = fields.Integer()
+    email = fields.Email(validate=validate.Email())
+
+
 class EventSchema(Schema):
     id = fields.Integer(dump_only=True)
     title = fields.Str(required=True)
@@ -49,6 +56,7 @@ class EventSchema(Schema):
     location = fields.Str(required=True)
     date = fields.Str(required=True)
     imageUrl = fields.Str(dump_only=True)
+    guest = fields.Nested('UpdateUserSchema', many=True)
 
     @pre_load
     def sanitize(self, data, **kwargs):
@@ -67,10 +75,3 @@ class EventSchema(Schema):
         data["imageUrl"] = url_for('static', filename='event_image/' +
                                    data["imageUrl"].split("/")[-1])
         return data
-
-
-class UpdateUserSchema(Schema):
-    id = fields.Integer(dump_only=True)
-    full_name = fields.Str()
-    contact = fields.Integer()
-    email = fields.Email(validate=validate.Email())
