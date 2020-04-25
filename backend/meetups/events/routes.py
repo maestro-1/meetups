@@ -3,8 +3,8 @@ from meetups.utils import uploads, event_entry
 from multiprocessing import Queue, Lock
 from meetups.models import Events, Guests, Users
 from flask import jsonify, request, Blueprint, g, make_response, abort
-from meetups.modelSchema import EventSchema
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from meetups.modelSchema import EventSchema, UpdateUserSchema
+from flask_jwt_extended import jwt_required, get_jwt_identity, jwt_optional
 from werkzeug.exceptions import BadRequestKeyError, NotAcceptable
 from pyinstrument import Profiler
 from marshmallow import ValidationError
@@ -34,21 +34,31 @@ def after_request(response):
 
 @events.route("/meetups")
 def all_events():
-    event_schema = EventSchema(many=True)
+    event_schema = EventSchema(many=True, exclude=('guest',))
     # page = request.args.get("page", 1, type=int)
     # events = Events.query.paginate(page=page, per_page=5)
     meetups = Events.query.all()
     meetups = event_schema.dump(meetups)
-
     return jsonify(meetups), 200
 
 
 @events.route("/meetup/<int:event_id>")
+@jwt_optional
 def single_event(event_id):
-    event_schema = EventSchema()
+    user = get_jwt_identity()
     event = Events.query.get_or_404(event_id)
-    event = event_schema.dump(event)
-    return jsonify(event)
+    host_id = event.hosting
+
+    for host in host_id:
+        if user and host.email == user:
+            event_schema = EventSchema()
+            meetups = event_schema.dump(event)
+            return jsonify(event=meetups), 200
+        continue
+
+    event_schema = EventSchema(exclude=('guest',))
+    meetups = event_schema.dump(event)
+    return jsonify(event=meetups), 200
 
 
 @events.route('/meetup/<int:event_id>/edit', methods=['PUT', 'DELETE'])
@@ -73,13 +83,13 @@ def edit_event(event_id):
                 db.session.commit()
                 return jsonify('updated succesfully {}'.format(update))
 
-            if request.method == 'DELETE':
-                try:
+            try:
+                if request.method == 'DELETE':
                     db.session.delete(events)
                     db.session.commit()
                     return jsonify({'msg': 'event deleted'}), 203
-                except Exception:
-                    return jsonify({'msg': 'Internal Serve Error'}), 500
+            except Exception:
+                return jsonify({'msg': 'Try Later'}), 500
     else:
         abort(403)
 

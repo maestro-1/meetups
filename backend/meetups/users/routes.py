@@ -7,6 +7,7 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identi
 from meetups.modelSchema import UserSchema, LoginSchema, UpdateUserSchema
 from marshmallow import ValidationError
 from pyinstrument import Profiler
+from datetime import timedelta
 
 
 users = Blueprint("users", __name__)
@@ -42,14 +43,13 @@ def sign_up(error=None):
             raise ValidationError("email address already taken, choose a different one")
 
         user_entry(user)
-        return jsonify("Welcome {}".format(user["password"])), 201
+        return jsonify("Welcome {}".format(user["full_name"])), 201
     except ValidationError as error:
         return jsonify({'msg': error.messages}), 400
 
 
 @users.route("/login", methods=["POST"])
 def login():
-    from datetime import timedelta
     user_schema = UserSchema()
     login_schema = LoginSchema()
     login = login_schema.load(request.json)
@@ -104,4 +104,3 @@ def password_reset():
 @jwt_required
 def logout():
     pass
-

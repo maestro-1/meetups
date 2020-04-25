@@ -18,9 +18,11 @@ jwt = JWTManager(app)
 from .events.routes import events
 from .users.routes import users
 from .main.routes import main
+from .guests.routes import guests
 from .errors.handlers import errors
 
 app.register_blueprint(events)
 app.register_blueprint(users)
 app.register_blueprint(main)
+app.register_blueprint(guests)
 app.register_blueprint(errors)

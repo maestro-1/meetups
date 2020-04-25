@@ -62,7 +62,7 @@ class BaseTestCase(TestCase):
 
         event1.guest.append(guest1)
         event2.guest.append(guest2)
-        event1.guest.append(guest1)
+        event1.guest.append(guest2)
 
         db.session.commit()
 
