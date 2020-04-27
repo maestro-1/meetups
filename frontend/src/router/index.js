@@ -53,12 +53,14 @@ const routes = [
   {
     path: "/meetup/create",
     name: "createMeetUps",
-    component: CreateMeetups
+    component: CreateMeetups,
+    meta: { requiresAuth: true }
   },
   {
     path: "/profile",
     name: "profile",
-    component: Profile
+    component: Profile,
+    meta: { requiresAuth: true }
   },
   {
     path: "/login",
@@ -76,6 +78,19 @@ const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes
+});
+
+router.beforeEach((To, From, next) => {
+  let logging = localStorage.getItem("user");
+  if (To.matched.some(record => record.meta.requiresAuth)) {
+    if (!logging) {
+      next("/");
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
 });
 
 export default router;
