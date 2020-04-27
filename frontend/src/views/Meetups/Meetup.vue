@@ -1,60 +1,67 @@
 <template>
   <v-container fluid>
-    <div id="beautify" @click="expand()">
-      <v-row dense class="justify-center" style="cursor: pointer;">
-        <v-col :cols="state.card.flex">
-          <v-card>
-            <v-img
-              :src="'http://127.0.0.1:5000' + meetup.imageUrl"
-              gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-            >
-            </v-img>
-          </v-card>
-        </v-col>
-      </v-row>
-      <v-row dense class="justify-center" style="cursor: pointer;">
-        <v-col :cols="state.card.flex">
-          <v-expand-transition>
-            <v-card>
-              <div v-if="state.show">
-                <v-card-title>{{ meetup.title }}</v-card-title>
-                <v-card-subtitle>{{ meetup.description }}</v-card-subtitle>
-                <v-card-subtitle>{{ meetup.location }}</v-card-subtitle>
-                <v-card-subtitle>{{ meetup.date }}</v-card-subtitle>
-              </div>
-              <div v-else>
-                <v-card-actions>
-                  <v-card-title>{{ meetup.title }}</v-card-title>
-                </v-card-actions>
-              </div>
-            </v-card>
-          </v-expand-transition>
-        </v-col>
-      </v-row>
-    </div>
+    <v-card class="mx-auto my-12" max-width="1000">
+      <v-card-title class="d-flex justify-center align-baseline">
+        <h1>{{ event.title }}</h1>
+      </v-card-title>
+
+      <v-container fluid>
+        <v-img
+          height="500"
+          :src="'http://127.0.0.1:5000' + event.imageUrl"
+        ></v-img>
+      </v-container>
+
+      <v-card-text>
+        <div class="my-4 subtitle-1">
+          {{ event.location }}
+        </div>
+
+        <div>{{ event.description }}</div>
+      </v-card-text>
+
+      <v-divider class="mx-4"></v-divider>
+
+      <v-card-text>
+        <v-chip-group
+          v-model="selection"
+          active-class="deep-purple accent-4 white--text"
+          column
+        >
+          <v-chip>{{ date.day }}</v-chip>
+          <v-chip>{{ date.time }}</v-chip>
+        </v-chip-group>
+      </v-card-text>
+
+      <v-card-actions>
+        <v-btn color="deep-purple lighten-2" text>
+          register
+        </v-btn>
+        <v-btn color="deep-purple lighten-2" text>
+          unregister
+        </v-btn>
+      </v-card-actions>
+    </v-card>
   </v-container>
 </template>
 
 <script>
-import { reactive, computed } from "@vue/composition-api";
+import { computed } from "@vue/composition-api";
 export default {
-  props: ["id"],
+  props: {
+    event: {
+      type: Object,
+      required: true
+    }
+  },
 
-  setup(props, { root: { $store } }) {
-    const state = reactive({
-      card: {
-        flex: 8
-      },
-      show: false
+  setup(props) {
+    const date = computed(() => {
+      let [day, time] = props.event.date.split(" ");
+      time = time.slice(0, 5);
+      return { day, time };
     });
-    const meetup = computed(() => {
-      return $store.getters.singleEvents(Number(props.id));
-    });
-
-    const expand = () => {
-      state.show = !state.show;
-    };
-    return { state, meetup, expand };
+    return { date };
   }
 };
 </script>

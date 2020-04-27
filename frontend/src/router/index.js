@@ -8,6 +8,7 @@ import CreateMeetups from "@/views/Meetups/CreateMeetup.vue";
 import Profile from "@/views/Users/Profile.vue";
 import Signin from "@/views/Users/Signin.vue";
 import Signup from "@/views/Users/Signup.vue";
+import { store } from "../store/index";
 
 Vue.use(VueRouter);
 
@@ -31,7 +32,23 @@ const routes = [
     path: "/meetups/:id",
     name: "meetup",
     props: true,
-    component: Meetup
+    component: Meetup,
+    beforeEnter(to, from, next) {
+      store
+        .dispatch("getEvent", to.params.id)
+        .then(event => {
+          to.params.event = event;
+          next();
+        })
+        .catch(error => {
+          if (error.response && error.response.status == 404) {
+            console.log(error);
+            //   next({ name: '404', params: { resource: 'event' } })
+            // } else {
+            //   next({ name: 'network-issue' })
+          }
+        });
+    }
   },
   {
     path: "/meetup/create",

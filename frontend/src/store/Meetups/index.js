@@ -3,14 +3,20 @@ import { sendEventDetails, sendEventImage } from "../../utils/requests.js";
 
 export default {
   state: {
-    events: []
+    events: [],
+    event: {}
   },
   mutations: {
     getEvents(state, payload) {
       state.events = payload;
     },
+
+    setEvent(state, event) {
+      state.event = event;
+    },
+
     createEvents(state, payload) {
-      state.events.push({...payload});
+      state.events.push({ ...payload });
     }
   },
   actions: {
@@ -19,7 +25,6 @@ export default {
         .get("http://127.0.0.1:5000/meetups")
         .then(response => {
           let events = response.data;
-          console.log(events)
           return events;
           // return events.sort((eventA, eventB) => eventA.date - eventB.date);
         })
@@ -27,7 +32,7 @@ export default {
           let meetups = [];
           for (let key in data) {
             meetups.push({
-              id: Number(key) + 1,
+              id: data[key].id,
               title: data[key].title,
               description: data[key].description,
               location: data[key].location,
@@ -38,6 +43,27 @@ export default {
           commit("getEvents", meetups);
         })
         .catch(err => err.message);
+    },
+
+    getEvent({ commit, getters, state }, ide) {
+      if (ide == state.event.ide) {
+        return state.event;
+      }
+
+      let event = getters.singleEvents(ide);
+
+      if (event) {
+        commit("setEvent", event);
+        return event;
+      } else {
+        return axios
+          .get(`http://127.0.0.1:5000/meetup/${ide}`)
+          .then(response => {
+            let { event } = response.data;
+            commit("setEvent", response.data);
+            return event;
+          });
+      }
     },
 
     createEvents({ commit }, payload) {
