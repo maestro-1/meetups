@@ -4,14 +4,14 @@ export default {
   state: {
     user: null,
     loading: false,
-    error: null
+    alert: null
   },
   mutations: {
     SignUpUser(state, payload) {
       state.alerts = payload;
     },
-    Error(state, error) {
-      state.error = error;
+    Alert(state, alert) {
+      state.alert = alert;
     },
     LogUserIn(state, userData) {
       state.user = userData;
@@ -53,7 +53,7 @@ export default {
           commit("LogUserIn", response.data);
         })
         .catch(err => {
-          commit("Error", err);
+          commit("Alert", err);
         });
     }
   },

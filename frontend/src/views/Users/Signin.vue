@@ -52,7 +52,7 @@ import { reactive } from "@vue/composition-api";
 export default {
   props: [],
 
-  setup(props, { root: { $store } }) {
+  setup(props, { root: { $store, $router } }) {
     const state = reactive({
       user: {
         emai: "",
@@ -70,6 +70,7 @@ export default {
         password: state.user.password
       };
       $store.dispatch("LogUserIn", user);
+      $router.push({ name: "home" });
     };
     return { state, login };
   }

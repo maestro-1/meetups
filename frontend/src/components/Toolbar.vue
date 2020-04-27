@@ -3,10 +3,7 @@
     <v-sheet class="overflow-hidden" style="position: relative;">
       <v-navigation-drawer v-model="state.sideNav" fixed temporary>
         <v-list nav dense>
-          <v-list-item-group
-            v-for="(menu, index) in state.menuItems"
-            :key="index"
-          >
+          <v-list-item-group v-for="(menu, index) in dynamicNav" :key="index">
             <div>
               <p>
                 <v-icon left>{{ menu.icons }}</v-icon>
@@ -32,7 +29,7 @@
               <v-spacer></v-spacer>
 
               <v-toolbar-items
-                v-for="(menu, index) in state.menuItems"
+                v-for="(menu, index) in dynamicNav"
                 :key="index"
                 class="d-none d-sm-flex"
               >
@@ -51,43 +48,60 @@
 </template>
 
 <script>
-import { reactive } from "@vue/composition-api";
+import { reactive, computed } from "@vue/composition-api";
 
 export default {
   name: "Toolbar",
 
   setup() {
     const state = reactive({
-      sideNav: false,
-      menuItems: [
-        {
-          name: "View Events",
-          icons: "calendar_today",
-          route: "meetups"
-        },
-        {
-          name: "Create Event",
-          icons: "add_box",
-          route: "meetup/create"
-        },
-        {
-          name: "Profile",
-          icons: "person",
-          route: "profile"
-        },
-        {
-          name: "Login",
-          icons: "people_alt",
-          route: "login"
-        },
-        {
-          name: "Sign Up",
-          icons: "person_add",
-          route: "signUp"
-        }
-      ]
+      sideNav: false
     });
-    return { state };
+
+    const dynamicNav = computed(() => {
+      let menuItems = [];
+      let authenticated = localStorage.getItem("user");
+
+      if (authenticated) {
+        menuItems = [
+          {
+            name: "View Events",
+            icons: "calendar_today",
+            route: "meetups"
+          },
+          {
+            name: "Create Event",
+            icons: "add_box",
+            route: "meetup/create"
+          },
+          {
+            name: "Profile",
+            icons: "person",
+            route: "profile"
+          }
+        ];
+      } else {
+        menuItems = [
+          {
+            name: "View Events",
+            icons: "calendar_today",
+            route: "meetups"
+          },
+          {
+            name: "Login",
+            icons: "people_alt",
+            route: "login"
+          },
+          {
+            name: "Sign Up",
+            icons: "person_add",
+            route: "signUp"
+          }
+        ];
+      }
+      return menuItems;
+    });
+    return { state, dynamicNav };
   }
 };
 </script>
