@@ -2,16 +2,11 @@ import axios from "axios";
 
 export default {
   state: {
-    user: null,
-    loading: false,
-    alert: null
+    user: null
   },
   mutations: {
     SignUpUser(state, payload) {
-      state.alerts = payload;
-    },
-    Alert(state, alert) {
-      state.alert = alert;
+      state.user = payload;
     },
     LogUserIn(state, userData) {
       state.user = userData;
@@ -39,7 +34,8 @@ export default {
           commit("SignUpUser", response.data);
         })
         .catch(err => {
-          commit("Error", err);
+          let reply = err.response.data;
+          commit("setAlert", ...reply.msg);
         });
     },
     LogUserIn({ commit }, payload) {
@@ -53,9 +49,14 @@ export default {
           commit("LogUserIn", response.data);
         })
         .catch(err => {
-          commit("Alert", err);
+          let reply = err.response.data;
+          commit("setAlert", reply.msg);
         });
     }
   },
-  getters: {}
+  getters: {
+    user(state) {
+      return state.user;
+    }
+  }
 };

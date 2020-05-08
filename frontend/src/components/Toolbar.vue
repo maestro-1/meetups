@@ -48,21 +48,23 @@
 </template>
 
 <script>
-import { reactive, computed } from "@vue/composition-api";
+import { reactive, computed, watch } from "@vue/composition-api";
 
 export default {
   name: "Toolbar",
 
-  setup() {
+  props: [],
+
+  setup(props, { root: { $store } }) {
     const state = reactive({
-      sideNav: false
+      sideNav: false,
+      authenticated: null
     });
 
     const dynamicNav = computed(() => {
       let menuItems = [];
-      let authenticated = localStorage.getItem("user");
 
-      if (authenticated) {
+      if (state.authenticated) {
         menuItems = [
           {
             name: "View Events",
@@ -100,6 +102,10 @@ export default {
         ];
       }
       return menuItems;
+    });
+
+    watch(() => {
+      state.authenticated = $store.getters.user;
     });
     return { state, dynamicNav };
   }
