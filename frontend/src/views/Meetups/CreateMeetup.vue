@@ -1,5 +1,11 @@
 <template>
   <v-container>
+    <v-layout row class="mt-12" v-if="alert">
+      <v-flex xs12 sm6 offset-xs3>
+        <app-alert @dismissed="onDismissed" :text="alert"></app-alert>
+      </v-flex>
+    </v-layout>
+
     <v-layout row>
       <v-flex xs12 sm6 offset-xs3>
         <h3>Create a new Event</h3>
@@ -143,7 +149,7 @@ import { reactive, computed } from "@vue/composition-api";
 export default {
   props: [],
 
-  setup(props, { root }) {
+  setup(props, { root: { $store, $router } }) {
     const state = reactive({
       event: {
         title: " ",
@@ -197,16 +203,26 @@ export default {
         image: state.image,
         date: (() => state.event.date + "," + state.time)()
       };
-      root.$store.dispatch("createEvents", newEvent);
-      root.$router.push({ name: "home" });
+      $store.dispatch("createEvents", newEvent);
+      $router.push({ name: "home" });
     };
+
+    const onDismissed = () => {
+      $store.dispatch("clearAlert");
+    };
+
+    const alert = computed(() => {
+      return $store.getters.alert;
+    });
 
     return {
       state,
       datetime,
       createEvent,
       onFilePicked,
-      validForm
+      validForm,
+      onDismissed,
+      alert
     };
   }
 };

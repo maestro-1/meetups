@@ -1,5 +1,11 @@
 <template>
   <v-container class="cnt">
+    <v-layout row class="mt-12" v-if="alert">
+      <v-flex xs12 sm6 offset-xs3>
+        <app-alert @dismissed="onDismissed" :text="alert"></app-alert>
+      </v-flex>
+    </v-layout>
+
     <v-layout row class="mt-12">
       <v-flex xs12 sm6 offset-xs3>
         <h3>Login</h3>
@@ -47,7 +53,7 @@
 </template>
 
 <script>
-import { reactive } from "@vue/composition-api";
+import { reactive, computed } from "@vue/composition-api";
 
 export default {
   props: [],
@@ -64,15 +70,25 @@ export default {
       }
     });
 
+    const onDismissed = () => {
+      $store.dispatch("clearAlert");
+    };
+
+    const alert = computed(() => {
+      return $store.getters.alert;
+    });
+
     const login = () => {
       const user = {
         email: state.user.email,
         password: state.user.password
       };
       $store.dispatch("LogUserIn", user);
-      $router.push({ name: "home" });
+      setTimeout(console.log(""), 1000);
+      $router.push("/profile");
     };
-    return { state, login };
+
+    return { state, login, onDismissed, alert };
   }
 };
 </script>

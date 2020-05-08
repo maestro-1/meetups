@@ -1,5 +1,11 @@
 <template>
   <v-container class="cnt">
+    <v-layout row class="mt-12" v-if="alert">
+      <v-flex xs12 sm6 offset-xs3>
+        <app-alert @dismissed="onDismissed" :text="alert"></app-alert>
+      </v-flex>
+    </v-layout>
+
     <v-layout row class="mt-12">
       <v-flex xs12 sm6 offset-xs3>
         <h3>Sign up</h3>
@@ -86,6 +92,7 @@
 
 <script>
 import { reactive, computed } from "@vue/composition-api";
+// import appAlert from "../../components/Alert";
 
 export default {
   props: [],
@@ -103,6 +110,14 @@ export default {
         password: "",
         confirmPassword: ""
       }
+    });
+
+    const onDismissed = () => {
+      $store.dispatch("clearAlert");
+    };
+
+    const alert = computed(() => {
+      return $store.getters.alert;
     });
 
     const compare = computed(() => {
@@ -123,10 +138,11 @@ export default {
         password: state.user.password
       };
       $store.dispatch("SignUpUser", newUser);
-      $router.push({ name: "home" });
+      setTimeout(console.log(""), 1000);
+      $router.push({ name: "login" });
     };
 
-    return { state, compare, validForm, SignUp };
+    return { state, compare, validForm, SignUp, onDismissed, alert };
   }
 };
 </script>

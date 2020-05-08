@@ -36,7 +36,6 @@ export default {
       if ($store.getters.availableEvents.length != 0) {
         return $store.getters.availableEvents;
       }
-      console.log("hahaha");
       $store.dispatch("getEvents");
     });
     return { state, upComingEvents };

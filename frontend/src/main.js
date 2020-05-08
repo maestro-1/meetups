@@ -7,10 +7,13 @@ import "roboto-fontface/css/roboto/roboto-fontface.css";
 import "@mdi/font/css/materialdesignicons.css";
 import VueCompositionApi from "@vue/composition-api";
 import Axios from "axios";
+import AlertCmp from "../src/components/Alert.vue";
 
 Vue.use(VueCompositionApi);
 Vue.use(vuetify);
 Vue.config.productionTip = false;
+
+Vue.component("app-alert", AlertCmp);
 
 new Vue({
   router,
